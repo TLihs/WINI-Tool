@@ -17,50 +17,49 @@ namespace WINI_Tool.Data
 {
     public class INISection : INIContentBase
     {
-        private string _originalName;
-        private string _originalComment;
+        private string _name;
+        private string _comment;
         private List<INIKey> _iniKeys;
         private List<INIGroup> _iniGroups;
-        private INICommentSection _sectionComment;
         private bool _useParallelization;
         
-        public string Name { get; set; }
-        public string Comment { get; set; }
+        public string Name => _name;
+        public string Comment => _comment;
+        public List<INIKey> INIKeys => _iniKeys;
+        public List<INIGroup> INIGroups => _iniGroups;
+        public bool UseParallelization => _useParallelization;
 
-        private INISection(long positionStart, string name, string lineContent, INIContentBase previousContent, string comment) : base(positionStart, lineContent, previousContent)
+        private INISection(LineContentBase lineContent, string name, string comment) : base(lineContent)
         {
-            _originalName = name;
-            _originalComment = comment == null ? string.Empty : comment;
+            _name = name;
+            _comment = comment;
+            
             _iniKeys = new List<INIKey>();
-            _useParallelization = false;
+            _iniGroups = new List<INIGroup>();
 
-            Reset();
+            _useParallelization = false;
         }
 
-        public static INISection Create(long positionStart, string lineContent, INIContentBase previousContent, string comment = null)
+        public static INISection Create(LineContentBase lineContent, string comment = null)
         {
-            if (!RXSectionName.IsMatch(lineContent))
+            if (!RXSectionName.IsMatch(lineContent.Text))
             {
-                Debug.Print(string.Format("INISection::Create(%d, %s, ..., %s) - section doesn't match section format", positionStart, lineContent, comment == null ? string.Empty : comment));
+                Debug.Print(string.Format("INISection::Create(%s) - section doesn't match section format", lineContent.Text));
                 return null;
             }
             
-            Match match = RXSectionName.Match(lineContent);
+            Match match = RXSectionName.Match(lineContent.Text);
             if (match.Groups[0].Length > 0)
             {
-                Debug.Print(string.Format("INISection::Create(%d, %s, ..., %s) - section is commented out", positionStart, lineContent, comment == null ? string.Empty : comment));
+                Debug.Print(string.Format("INISection::Create(%s) - section is commented out", lineContent.Text));
                 return null;
             }
 
             string name = match.Groups[1].Value;
-            // TODO: Probably not necessary since the RegEx doesn't match empty content.
-            //if (string.IsNullOrWhiteSpace(name))
-            //{
-            //    Debug.Print(string.Format("INISection::Create(%d, %s, ..., %s) - section name is null or whitespace", positionStart, lineContent, comment == null ? string.Empty : comment));
-            //    return null;
-            //}
+            if (string.IsNullOrWhiteSpace(comment))
+                comment = match.Groups[5].Value;
 
-            return new INISection(positionStart, name, lineContent, previousContent, comment);
+            return new INISection(lineContent, name, comment);
         }
 
         public bool ContainsKey(string key, bool includeCommented = false)
@@ -82,32 +81,29 @@ namespace WINI_Tool.Data
         public INIKey GetINIKeyFromPosition(long position, bool includeCommented = false)
         {
             if (_useParallelization)
-                return _iniKeys.AsParallel().FirstOrDefault(inikey => inikey.PositionStart >= position && inikey.PositionEnd <= position && includeCommented ? true : !inikey.IsComment);
+                return _iniKeys.AsParallel().FirstOrDefault(inikey => inikey.LineContent.PositionStart >= position && inikey.LineContent.PositionEnd <= position && includeCommented ? true : !inikey.IsComment);
             else
-                return _iniKeys.FirstOrDefault(inikey => inikey.PositionStart >= position && inikey.PositionEnd <= position && includeCommented ? true : !inikey.IsComment);
+                return _iniKeys.FirstOrDefault(inikey => inikey.LineContent.PositionStart >= position && inikey.LineContent.PositionEnd <= position && includeCommented ? true : !inikey.IsComment);
         }
 
         public long GetPositionFromINIKey(string key, bool includeCommented = false)
         {
             if (_useParallelization)
-                return _iniKeys.AsParallel().FirstOrDefault(inikey => inikey.Key.Equals(key, StringComparison.InvariantCultureIgnoreCase) && includeCommented ? true : !inikey.IsComment).PositionStart;
+                return _iniKeys.AsParallel().FirstOrDefault(inikey => inikey.Key.Equals(key, StringComparison.InvariantCultureIgnoreCase) && includeCommented ? true : !inikey.IsComment).LineContent.PositionStart;
             else
-                return _iniKeys.FirstOrDefault(inikey => inikey.Key.Equals(key, StringComparison.InvariantCultureIgnoreCase) && includeCommented ? true : !inikey.IsComment).PositionStart;
+                return _iniKeys.FirstOrDefault(inikey => inikey.Key.Equals(key, StringComparison.InvariantCultureIgnoreCase) && includeCommented ? true : !inikey.IsComment).LineContent.PositionStart;
         }
 
-        public void AddKeyValuePair(long positionStart, string lineContent)
+        public void AddINIKey(INIKey key)
         {
-            if (!ContainsKey(key))
-            {
-                INIKey inikey = INIKey.Create(positionStart, lineContent, value, line, isComment, lineContent);
-                if (inikey != null)
+            if (key != null)
+                if (!ContainsKey(key.Key))
                 {
-                    _iniKeys.Add(inikey);
+                    _iniKeys.Add(key);
 
                     if (!_useParallelization && _iniKeys.Count > 1000)
                         _useParallelization = true;
                 }
-            }
         }
 
         public void AddGroup(long positionStart, string lineContent, string groupName)
@@ -197,46 +193,6 @@ namespace WINI_Tool.Data
             }
 
             return bool.Parse(iniKey.Value);
-        }
-
-        public override void Reset()
-        {
-            Name = _originalName;
-            Comment = _originalComment;
-
-            base.Reset();
-        }
-
-        public void ResetContent()
-        {
-            if (_iniKeys.Count > 0)
-                _iniKeys[0].Reset();
-        }
-
-        public void ResetAll()
-        {
-            Reset();
-            ResetContent();
-        }
-
-        public override void Save()
-        {
-            _originalName = Name;
-            _originalComment = Comment;
-
-            base.Save();
-        }
-
-        public void SaveContent()
-        {
-            if (_iniKeys.Count > 0)
-                _iniKeys[0].Save();
-        }
-
-        public void SaveAll()
-        {
-            Save();
-            SaveContent();
         }
     }
 }

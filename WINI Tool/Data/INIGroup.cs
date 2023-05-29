@@ -12,43 +12,34 @@ using static WINI_Tool.Support.Constants;
 
 namespace WINI_Tool.Data
 {
-    public class INIGroup : INISectionContentBase
+    public class INIGroup : INIContentBase
     {
-        private string _originalGroupName;
+        private string _groupName;
+        private List<INIKey> _keys;
 
-        public string GroupName { get; set; }
+        public string GroupName => _groupName;
+        public List<INIKey> Keys => _keys;
 
-        private INIGroup(long positionStart, string lineContent, INIContentBase previousContent, string groupName) : base(positionStart, lineContent, previousContent)
+        private INIGroup(LineContentBase lineContent, INISection section, string groupName) : base(lineContent)
         {
-            _originalGroupName = groupName;
-            GroupName = _originalGroupName;
+            _groupName = groupName;
         }
 
-        public static INIGroup Create(long positionStart, string lineContent, INIContentBase previousContent)
+        public static INIGroup Create(LineContentBase lineContent, INISection section)
         {
-            if (!RXGroupName.IsMatch(lineContent))
+            if (!RXGroupName.IsMatch(lineContent.Text))
             {
-                Debug.Print(string.Format("INIGroup::Create(%d, %s, ...) - content doesn't match format", positionStart, lineContent));
+                Debug.Print(string.Format("INIGroup::Create(%s) - content doesn't match format", lineContent.Text));
                 return null;
             }
             
-            Match match = RXGroupName.Match(lineContent);
-            if (string.IsNullOrWhiteSpace(groupName))
+            Match match = RXGroupName.Match(lineContent.Text);
+            string groupname = match.Groups[0].Value;
+
+            if (string.IsNullOrWhiteSpace(groupname))
                 return null;
             else
-                return new INIGroup(positionStart, lineContent, previousContent, groupName);
-        }
-
-        public override void Reset()
-        {
-            GroupName = _originalGroupName;
-            base.Reset();
-        }
-
-        public override void Save()
-        {
-            _originalGroupName = GroupName;
-            base.Save();
+                return new INIGroup(lineContent, section, groupname);
         }
     }
 }

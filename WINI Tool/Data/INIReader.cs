@@ -6,7 +6,10 @@ using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+
 using WINI_Tool.Controls;
+using WINI_Tool.Data.Base;
+
 using static WINI_Tool.Support.Constants;
 
 namespace WINI_Tool.Data
@@ -14,7 +17,7 @@ namespace WINI_Tool.Data
     public class INIReader
     {
         private string _filePath;
-        private List<string> _lineContent;
+        private List<LineContentBase> _lineContentList;
         private List<INISection> _sections;
         private FileSystemWatcher _watcher;
 
@@ -22,7 +25,7 @@ namespace WINI_Tool.Data
 
         private INIReader()
         {
-            _lineContent = new List<string>();
+            _lineContentList = new List<LineContentBase>();
             _sections = new List<INISection>();
         }
 
@@ -60,7 +63,7 @@ namespace WINI_Tool.Data
             string[] lines = File.ReadAllLines(filePath, Encoding.GetEncoding(1252));
             INISection section = AddSection("<default>", 0);
             INIGroup group = null;
-            _lineContent = new List<string>();
+            _lineContentList = new List<LineContentBase>();
             _sections = new List<INISection>();
             List<string> commentBuffer = new List<string>();
             long position = 0;
@@ -69,37 +72,7 @@ namespace WINI_Tool.Data
             {
                 string line = lines[linenumber];
 
-                if (string.IsNullOrWhiteSpace(line))
-                {
-                    position++;
-                    continue;
-                }
-
-                if (RXSectionName.IsMatch(line))
-                {
-                    Match sectionmatch = RXSectionName.Match(line);
-                    if (sectionmatch.Groups[0].Length == 0)
-                    {
-                        INISection newsection = AddSection(sectionmatch.Groups[1].Value, linenumber + 1);
-                        if (newsection != null)
-                            section = newsection;
-                    }
-                }
-                else if (RXKeyValuePair.IsMatch(line))
-                {
-                    if (group == null)
-                        group = section.Add
-                    Match keyvaluematch = RXKeyValuePair.Match(line);
-                    section.AddKeyValuePair(keyvaluematch.Groups[1].Value, keyvaluematch.Groups[2].Value, linenumber, keyvaluematch.Groups[0].Length > 0, line);
-                }
-                else if (RXGroupName.IsMatch(line))
-                {
-
-                }
-                else if (RXComment.IsMatch(line))
-                {
-                    commentBuffer.Add(line);
-                }
+                _lineContentList.Add(new LineContentBase(position, line, null, null));
 
                 position += line.Length + 1;
             }

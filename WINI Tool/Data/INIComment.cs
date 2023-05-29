@@ -7,14 +7,14 @@ using WINI_Tool.Data.Base;
 
 namespace WINI_Tool.Data
 {
-    public abstract class INIComment : INISectionContentBase
+    public abstract class INIComment : INIContentBase
     {
         private string _originalComment;
 
         public string Comment { get; set; }
         public long LineNumber { get; set; }
 
-        public INIComment(long positionStart, string comment, INIContentBase previousContent) : base(positionStart, comment, previousContent)
+        public INIComment(long positionStart, string comment, LineContentBase previousContent) : base(positionStart, comment, previousContent)
         {
             _originalComment = comment;
         }
@@ -38,7 +38,7 @@ namespace WINI_Tool.Data
         
         public INIKey Key { get; set; }
         
-        public INICommentKey(long positionStart, string comment, INIContentBase previousContent, INIKey key) : base(positionStart, comment, previousContent)
+        public INICommentKey(long positionStart, string comment, LineContentBase previousContent, INIKey key) : base(positionStart, comment, previousContent)
         {
             _originalKey = key;
             Key = _originalKey;
@@ -63,7 +63,7 @@ namespace WINI_Tool.Data
 
         public INISection Section { get; set; }
         
-        public INICommentSection(long positionStart, string comment, INIContentBase previousContent, INISection section) : base(positionStart, comment, previousContent)
+        public INICommentSection(long positionStart, string comment, LineContentBase previousContent, INISection section) : base(positionStart, comment, previousContent)
         {
             _originalSection = section;
             Section = _originalSection;

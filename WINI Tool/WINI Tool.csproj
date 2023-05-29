@@ -77,13 +77,14 @@
     <Compile Include="Controls\INISettingsControl.xaml.cs">
       <DependentUpon>INISettingsControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Data\INIComment.cs" />
     <Compile Include="Data\Base\INIContentBase.cs" />
+    <Compile Include="Data\INIComment.cs" />
+    <Compile Include="Data\Base\LineContentBase.cs" />
     <Compile Include="Data\INIDuplicate.cs" />
     <Compile Include="Data\INIGroup.cs" />
-    <Compile Include="Data\Base\INISectionContentBase.cs" />
     <Compile Include="Settings\Settings.cs" />
     <Compile Include="Support\Constants.cs" />
+    <Compile Include="Support\ExceptionHandling.cs" />
     <Page Include="Controls\DarkModeDictionary.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

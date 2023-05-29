@@ -12,7 +12,7 @@ using WINI_Tool.Data.Base;
 
 namespace WINI_Tool.Data
 {
-    public class INIKey : INISectionContentBase
+    public class INIKey : INIContentBase
     {
         private INIGroup _originalGroup;
         private string _originalLineContent;
@@ -25,7 +25,7 @@ namespace WINI_Tool.Data
         public string Value { get; set; }
         public bool IsComment { get; set; }
 
-        private INIKey(long positionStart, string lineContent, INIContentBase previousContent, string key, string value, bool isComment) : base(positionStart, lineContent, previousContent)
+        private INIKey(long positionStart, string lineContent, LineContentBase previousContent, string key, string value, bool isComment) : base(positionStart, lineContent, previousContent)
         {
             _originalLineContent = lineContent;
             _originalKey = key;
@@ -35,7 +35,7 @@ namespace WINI_Tool.Data
             Reset();
         }
 
-        public static INIKey Create(long positionStart, string lineContent, INIContentBase previousContent, string key, string value, bool isComment)
+        public static INIKey Create(long positionStart, string lineContent, LineContentBase previousContent, string key, string value, bool isComment)
         {
             if (string.IsNullOrWhiteSpace(key))
             {
