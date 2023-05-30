@@ -78,11 +78,16 @@
       <DependentUpon>INISettingsControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="Data\Base\INIContentBase.cs" />
-    <Compile Include="Data\INIComment.cs" />
+    <Compile Include="Data\Base\INIComment.cs" />
     <Compile Include="Data\Base\LineContentBase.cs" />
-    <Compile Include="Data\INIDuplicate.cs" />
-    <Compile Include="Data\INIGroup.cs" />
-    <Compile Include="Settings\Settings.cs" />
+    <Compile Include="Data\Base\INIGroup.cs" />
+    <Compile Include="Data\Project Management\INITemplateTargetPair.cs" />
+    <Compile Include="Data\Project Management\Project.cs" />
+    <Compile Include="Data\Project Management\ProjectManager.cs" />
+    <Compile Include="Settings\FileSettings.cs" />
+    <Compile Include="Settings\MergeSettings.cs" />
+    <Compile Include="Settings\ProjectManagerSettings.cs" />
+    <Compile Include="Settings\ProjectSettings.cs" />
     <Compile Include="Support\Constants.cs" />
     <Compile Include="Support\ExceptionHandling.cs" />
     <Page Include="Controls\DarkModeDictionary.xaml">
@@ -105,9 +110,9 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Data\INIKey.cs" />
-    <Compile Include="Data\INIReader.cs" />
-    <Compile Include="Data\INISection.cs" />
+    <Compile Include="Data\Base\INIKey.cs" />
+    <Compile Include="Data\Base\INIReader.cs" />
+    <Compile Include="Data\Base\INISection.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>

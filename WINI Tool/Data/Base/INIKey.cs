@@ -8,68 +8,79 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Linq;
 
-using WINI_Tool.Data.Base;
-
-namespace WINI_Tool.Data
+namespace WINI_Tool.Data.Base
 {
     public class INIKey : INIContentBase
     {
-        private INIGroup _originalGroup;
-        private string _originalLineContent;
-        private string _originalKey;
-        private string _originalValue;
-        private bool _originalIsComment;
+        private INIGroup _iniGroup;
+        private string _key;
+        private string _value;
+        private bool _isComment;
         
-        public INIGroup Group { get; set; }
-        public string Key { get; set; }
-        public string Value { get; set; }
-        public bool IsComment { get; set; }
-
-        private INIKey(long positionStart, string lineContent, LineContentBase previousContent, string key, string value, bool isComment) : base(positionStart, lineContent, previousContent)
+        public INIGroup Group => _iniGroup;
+        public string Key
         {
-            _originalLineContent = lineContent;
-            _originalKey = key;
-            _originalValue = value;
-            _originalIsComment = isComment;
+            get => _key;
+            set
+            {
+                if (value != _key)
+                {
+                    
+                }
+            }
+        }
+        public string Value
+        {
+            get => _value;
+            set
+            {
+                if (value != _value)
+                {
+
+                }
+            }
+        }
+        public bool IsComment
+        {
+            get => _isComment;
+            set
+            {
+
+            }
+        }
+
+        private INIKey(LineContentBase lineContent, string key, string value, bool isComment) : base(lineContent)
+        {
+            _key = key;
+            _value = value;
+            _isComment = isComment;
 
             Reset();
         }
 
-        public static INIKey Create(long positionStart, string lineContent, LineContentBase previousContent, string key, string value, bool isComment)
+        public static INIKey Create(LineContentBase lineContent, string key, string value, bool isComment)
         {
             if (string.IsNullOrWhiteSpace(key))
             {
-                Debug.Print(string.Format("INISection::Create(%d, %s, ..., %s, %s, %s) - key is null or whitespace", positionStart, lineContent, key, value, isComment ? "as comment" : "not as comment", lineContent));
+                Debug.Print(string.Format("INISection::Create(%s, %s, %s, %s) - key is null or whitespace", lineContent, key, value, isComment ? "as comment" : "not as comment"));
                 return null;
             }
 
-            return new INIKey(positionStart, lineContent, previousContent, key, value, isComment);
+            return new INIKey(lineContent, key, value, isComment);
         }
         public string GetINIFormatted()
         {
             return (IsComment ? ";" : string.Empty) + Key + "=" + Value;
         }
 
-        public override void Reset()
+        public void Reset()
         {
-            Group = _originalGroup;
-            LineContent = _originalLineContent;
-            Key = _originalKey;
-            Value = _originalValue;
-            IsComment = _originalIsComment;
-
-            base.Reset();
+            LineContent.Reset();
         }
 
-        public override void Save()
+        public void Save()
         {
-            _originalGroup = Group;
-            _originalLineContent = LineContent;
-            _originalKey = Key;
-            _originalValue = Value;
-            _originalIsComment = IsComment;
-
-            base.Save();
+            LineContent.Save();
         }
 
         public bool IsOfType(Type type)

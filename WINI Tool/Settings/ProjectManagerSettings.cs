@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace WINI_Tool.Settings
 {
-    public static class Settings
+    public class ProjectManagerSettings
     {
     }
 }

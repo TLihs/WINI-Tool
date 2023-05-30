@@ -20,12 +20,12 @@ namespace WINI_Tool.Data
         public string GroupName => _groupName;
         public List<INIKey> Keys => _keys;
 
-        private INIGroup(LineContentBase lineContent, INISection section, string groupName) : base(lineContent)
+        private INIGroup(LineContentBase lineContent, string groupName) : base(lineContent)
         {
             _groupName = groupName;
         }
 
-        public static INIGroup Create(LineContentBase lineContent, INISection section)
+        public static INIGroup Create(LineContentBase lineContent)
         {
             if (!RXGroupName.IsMatch(lineContent.Text))
             {
@@ -39,7 +39,13 @@ namespace WINI_Tool.Data
             if (string.IsNullOrWhiteSpace(groupname))
                 return null;
             else
-                return new INIGroup(lineContent, section, groupname);
+                return new INIGroup(lineContent, groupname);
+        }
+
+        // Keys should be added via the LineContentBase constructor by back looping to the next available group within a section
+        public void AddKey(INIKey key)
+        {
+
         }
     }
 }

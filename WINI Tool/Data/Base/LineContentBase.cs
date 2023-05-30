@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.Windows.Media.Animation;
 
 using static WINI_Tool.Support.Constants;
+using static WINI_Tool.Support.ExceptionHandling;
 
 namespace WINI_Tool.Data.Base
 {
@@ -19,7 +20,9 @@ namespace WINI_Tool.Data.Base
             Key = 3,
             Comment = 4
         }
-        
+
+        private INIReader _reader;
+        private INIContentBase _iniContent;
         private long _positionStart;
         private long _positionEnd;
         private long _lineNumber;
@@ -30,6 +33,7 @@ namespace WINI_Tool.Data.Base
         private int _errorList;
         private INIContentType _contentType;
 
+        public INIReader Reader => _reader;        
         // We expect PositionStart to not change, unless a previous content is changed.
         public long PositionStart
         {
@@ -124,9 +128,11 @@ namespace WINI_Tool.Data.Base
         public int Errors => _errorList;
         public INIContentType ContentType => _contentType;
 
-        public LineContentBase(long positionStart, string lineContent, LineContentBase previousContent, LineContentBase nextContent = null)
+        public LineContentBase(INIReader reader, long positionStart, string lineContent, LineContentBase previousContent = null, LineContentBase nextContent = null)
         {
             _errorList = 0x0;
+
+            _reader = reader;
 
             PreviousContent = previousContent;
             NextContent = nextContent;
@@ -139,11 +145,20 @@ namespace WINI_Tool.Data.Base
         private void EvaluateContent()
         {
             if (RXSectionName.IsMatch(_text))
+            {
                 _contentType = INIContentType.Section;
+                _iniContent = INISection.Create(this);
+            }
             else if (RXGroupName.IsMatch(_text))
+            {
                 _contentType = INIContentType.Group;
+                _iniContent = INIGroup.Create(this);
+            }
             else if (RXKeyValuePair.IsMatch(_text))
+            {
                 _contentType = INIContentType.Key;
+                _iniContent = INIKey.Create(this);
+            }
             else if (RXComment.IsMatch(_text))
                 _contentType = INIContentType.Comment;
             else
@@ -217,6 +232,36 @@ namespace WINI_Tool.Data.Base
 
             if (NextContent != null)
                 NextContent.PreviousContent = this;
+        }
+
+        public INISection GetSection(string sectionName)
+        {
+            if (_iniContent.GetType() == typeof(INISection) && ((INISection)_iniContent).Name.Equals(sectionName, StringComparison.OrdinalIgnoreCase))
+                return (INISection)_iniContent;
+            else if (NextContent == null)
+                return null;
+            else
+                return NextContent.GetSection(sectionName);
+        }
+
+        public INISection GetCurrentSection()
+        {
+            if (_iniContent.GetType() == typeof(INISection))
+                return (INISection)_iniContent;
+            else if (PreviousContent == null)
+                return null;
+            else
+                return PreviousContent.GetCurrentSection();
+        }
+
+        public INIGroup GetCurrentGroup()
+        {
+            if (_iniContent.GetType() == typeof(INIGroup))
+                return (INIGroup)_iniContent;
+            else if (PreviousContent == null)
+                return null;
+            else
+                return PreviousContent.GetCurrentGroup();
         }
     }
 }

@@ -8,30 +8,30 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 using WINI_Tool.Controls;
-using WINI_Tool.Data.Base;
 
 using static WINI_Tool.Support.Constants;
 
-namespace WINI_Tool.Data
+namespace WINI_Tool.Data.Base
 {
     public class INIReader
     {
         private string _filePath;
-        private List<LineContentBase> _lineContentList;
-        private List<INISection> _sections;
+        private LineContentBase _lineContent;
+        private INIContentControl _contentControl;
         private FileSystemWatcher _watcher;
 
         public string FilePath => _filePath;
+        public INIContentControl ContentControl => _contentControl;
 
-        private INIReader()
+        private INIReader(string filePath, INIContentControl contentControl)
         {
-            _lineContentList = new List<LineContentBase>();
-            _sections = new List<INISection>();
+            _filePath = filePath;
+            _contentControl = contentControl;
         }
 
         public static INIReader Create(string filePath, INIContentControl control = null)
         {
-            INIReader reader = new INIReader();
+            INIReader reader = new INIReader(filePath, control);
 
             if (!reader.LoadFile(filePath))
                 return null;
@@ -61,10 +61,7 @@ namespace WINI_Tool.Data
             }
 
             string[] lines = File.ReadAllLines(filePath, Encoding.GetEncoding(1252));
-            INISection section = AddSection("<default>", 0);
-            INIGroup group = null;
-            _lineContentList = new List<LineContentBase>();
-            _sections = new List<INISection>();
+            LineContentBase lastlinecontent = null;
             List<string> commentBuffer = new List<string>();
             long position = 0;
             
@@ -72,9 +69,22 @@ namespace WINI_Tool.Data
             {
                 string line = lines[linenumber];
 
-                _lineContentList.Add(new LineContentBase(position, line, null, null));
+                if (_lineContent == null)
+                {
+                    _lineContent = new LineContentBase(this, position, line, null, null);
+                }
+                else
+                {
+                    LineContentBase templinecontent = lastlinecontent;
+                    lastlinecontent = new LineContentBase(this, position, line, null, null);
 
-                position += line.Length + 1;
+                    if (templinecontent == null)
+                        _lineContent.NextContent = lastlinecontent;
+                    else
+                        templinecontent.NextContent = lastlinecontent;
+                }
+
+                position += line.Length + ("\r\n").Length;
             }
 
             _filePath = filePath;
@@ -94,7 +104,7 @@ namespace WINI_Tool.Data
 
         private bool ReloadFile()
         {
-
+            return false;
         }
 
         private bool LoadControl(INIContentControl control)
@@ -102,7 +112,7 @@ namespace WINI_Tool.Data
             if (control == null)
                 return false;
 
-            
+            return true;
         }
 
         private void OnFileChanged(object sender, FileSystemEventArgs e)
@@ -122,30 +132,9 @@ namespace WINI_Tool.Data
             }
         }
 
-        public INISection AddSection(string sectionName, long lineNumber)
-        {
-            if (_sections.ContainsKey(sectionName))
-            {
-                long line = _sections[sectionName].Line;
-                Debug.Print(string.Format("INIReader::AddSection(%s, %d) - section already exists at line %d", sectionName, lineNumber, line));
-                return null;
-            }
-
-            INISection section = INISection.Create(sectionName, lineNumber);
-            if (section != null)
-                _sections.Add(sectionName, section);
-
-            return section;
-        }
-
-        public void RemoveSection(string sectionName)
-        {
-
-        }
-
         public INISection GetSection(string sectionName)
         {
-            return _sections.Values.FirstOrDefault(section => section.Name == sectionName.ToLower());
+            return _lineContent.GetSection(sectionName);
         }
 
         public long GetValueFromSection(string sectionName, string key, int defaultValue)

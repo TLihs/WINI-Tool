@@ -9,11 +9,9 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Input;
 
-using WINI_Tool.Data.Base;
-
 using static WINI_Tool.Support.Constants;
 
-namespace WINI_Tool.Data
+namespace WINI_Tool.Data.Base
 {
     public class INISection : INIContentBase
     {
@@ -42,13 +40,14 @@ namespace WINI_Tool.Data
 
         public static INISection Create(LineContentBase lineContent, string comment = null)
         {
-            if (!RXSectionName.IsMatch(lineContent.Text))
+            Match match = RXSectionName.Match(lineContent.Text);
+
+            if (!match.Success)
             {
                 Debug.Print(string.Format("INISection::Create(%s) - section doesn't match section format", lineContent.Text));
                 return null;
             }
             
-            Match match = RXSectionName.Match(lineContent.Text);
             if (match.Groups[0].Length > 0)
             {
                 Debug.Print(string.Format("INISection::Create(%s) - section is commented out", lineContent.Text));
