@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace WINI_Tool.Data.Base.Base
+﻿namespace WINI_Tool.Data.Base.Base
 {
     public abstract class INIComment : INIContentBase
     {

@@ -1,15 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
+﻿using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Text;
-using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 
 using WINI_Tool.Controls;
-
-using static WINI_Tool.Support.Constants;
 
 namespace WINI_Tool.Data.Base
 {

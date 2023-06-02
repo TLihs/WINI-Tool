@@ -1,12 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Diagnostics.Eventing.Reader;
-using System.Linq;
-using System.Security.Cryptography.X509Certificates;
-using System.Text;
-using System.Threading.Tasks;
-using System.Xml.Linq;
+using System.Text.RegularExpressions;
+
+using static WINI_Tool.Support.Constants;
 
 namespace WINI_Tool.Data.Base
 {
@@ -25,7 +21,7 @@ namespace WINI_Tool.Data.Base
             {
                 if (value != _key)
                 {
-                    
+                    _key = value;
                 }
             }
         }
@@ -36,7 +32,7 @@ namespace WINI_Tool.Data.Base
             {
                 if (value != _value)
                 {
-
+                    _value = value;
                 }
             }
         }
@@ -45,7 +41,10 @@ namespace WINI_Tool.Data.Base
             get => _isComment;
             set
             {
-
+                if (value != _isComment)
+                {
+                    _isComment = value;
+                }
             }
         }
 
@@ -58,16 +57,29 @@ namespace WINI_Tool.Data.Base
             Reset();
         }
 
-        public static INIKey Create(LineContentBase lineContent, string key, string value, bool isComment)
+        public static INIKey Create(LineContentBase lineContent)
         {
-            if (string.IsNullOrWhiteSpace(key))
+            Match match = RXSectionName.Match(lineContent.Text);
+
+            if (!match.Success)
             {
-                Debug.Print(string.Format("INISection::Create(%s, %s, %s, %s) - key is null or whitespace", lineContent, key, value, isComment ? "as comment" : "not as comment"));
+                Debug.Print(string.Format("INIKey::Create(%s) - key doesn't match key format", lineContent.Text));
                 return null;
             }
 
-            return new INIKey(lineContent, key, value, isComment);
+            string key = match.Groups[1].Value;
+            string value = match.Groups[2].Value;
+            bool iscomment = match.Groups[0].Length > 0;
+            
+            if (string.IsNullOrWhiteSpace(key))
+            {
+                Debug.Print(string.Format("INIKey::Create(%s, %s, %s, %s) - key is null or whitespace", lineContent, key, value, iscomment ? "as comment" : "not as comment"));
+                return null;
+            }
+
+            return new INIKey(lineContent, key, value, iscomment);
         }
+
         public string GetINIFormatted()
         {
             return (IsComment ? ";" : string.Empty) + Key + "=" + Value;

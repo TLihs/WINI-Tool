@@ -1,12 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using static WINI_Tool.Support.ExceptionHandling;
 
 namespace WINI_Tool.Data.Base
 {
-    public class INIContentBase
+    public abstract class INIContentBase
     {
         private LineContentBase _lineContent;
 
@@ -25,6 +21,11 @@ namespace WINI_Tool.Data.Base
         public INIGroup GetCurrentGroup()
         {
             return _lineContent.GetCurrentGroup();
+        }
+
+        protected virtual void EvaluateContent()
+        {
+            LogFault(ERR_FUNCTION_NOTIMPLEMENTED, "INIContentBase::EvaluateContent()");
         }
     }
 }

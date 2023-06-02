@@ -179,18 +179,18 @@ namespace WINI_Tool.Data.Base
                     break;
 
                 case INIContentType.Section:
-                    if (RXSemiColon.IsMatch(_text))
-                        _errorList |= ERR_LINECONTENT_INVALIDCHAR;
+                    if (RXInvalidChars.IsMatch(_text))
+                        _errorList |= ERR_SECTION_INVALIDCHAR;
                     break;
 
                 case INIContentType.Group:
-                    if (RXSemiColon.IsMatch(_text))
-                        _errorList |= ERR_LINECONTENT_INVALIDCHAR;
+                    if (RXInvalidChars.IsMatch(_text))
+                        _errorList |= ERR_GROUP_INVALIDCHAR;
                     break;
 
                 case INIContentType.Key:
-                    if (RXSemiColon.IsMatch(_text))
-                        _errorList |= ERR_LINECONTENT_INVALIDCHAR;
+                    if (RXInvalidKeyChars.IsMatch(_text))
+                        _errorList |= ERR_KEY_INVALIDCHAR;
                     break;
 
                 case INIContentType.Comment:
@@ -257,10 +257,16 @@ namespace WINI_Tool.Data.Base
         public INIGroup GetCurrentGroup()
         {
             if (_iniContent.GetType() == typeof(INIGroup))
+                // found group
                 return (INIGroup)_iniContent;
+            else if (_iniContent.GetType() == typeof(INISection))
+                // if we reached the declaration of the INI section, then the calling content isn't within a group
+                return null;
             else if (PreviousContent == null)
+                // if we reached the beginning of the INI file, then the calling content isn't within a group
                 return null;
             else
+                // try the next previous content
                 return PreviousContent.GetCurrentGroup();
         }
     }
