@@ -145,5 +145,11 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\WPFExceptionHandler\WPFExceptionHandler\WPFExceptionHandler.csproj">
+      <Project>{d8a09f95-6d1e-4ffb-9d82-683890657f8f}</Project>
+      <Name>WPFExceptionHandler</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

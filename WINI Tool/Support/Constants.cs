@@ -87,7 +87,7 @@ namespace WINI_Tool.Support
                 if (type == typeof(string))
                     return KeyValueTypes.String;
 
-                LogFault(ERR_TYPING_CSTYPEINVALID, string.Format("type= '{%s}'", type.Name));
+                LogFault(WT_ERROR.WT_E_TYPING_CSTYPEINVALID, string.Format("type= '{{0}}'", type.Name));
                 return KeyValueTypes.Invalid;
             }
 
@@ -95,7 +95,22 @@ namespace WINI_Tool.Support
             {
                 switch (type)
                 {
-
+                    case KeyValueTypes.Bool:
+                        return typeof(bool);
+                    case KeyValueTypes.Float:
+                        return typeof(double);
+                    case KeyValueTypes.Path:
+                        return typeof(FileInfo);
+                    case KeyValueTypes.String:
+                        return typeof(string);
+                    case KeyValueTypes.DateTime:
+                        return typeof(DateTime);
+                    case KeyValueTypes.Invalid:
+                        LogFault(WT_ERROR.WT_E_TYPING_INITYPEINVALID, string.Format("Type is 'INVALID'. Parsing as string recommended."));
+                        return typeof(string);
+                    default:
+                        LogFault(WT_ERROR.WT_E_TYPING_INITYPEINOTIMPLEMENTED, string.Format("type= '{0}'", Enum.GetName(typeof(KeyValueTypes), type)));
+                        return null;
                 }
             }
         }

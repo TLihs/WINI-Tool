@@ -39,13 +39,13 @@ namespace WINI_Tool.Data.Base
 
             if (!match.Success)
             {
-                Debug.Print(string.Format("INISection::Create(%s) - section doesn't match section format", lineContent.Text));
+                Debug.Print(string.Format("INISection::Create({0}) - section doesn't match section format", lineContent.Text));
                 return null;
             }
             
             if (match.Groups[0].Length > 0)
             {
-                Debug.Print(string.Format("INISection::Create(%s) - section is commented out", lineContent.Text));
+                Debug.Print(string.Format("INISection::Create({0}) - section is commented out", lineContent.Text));
                 return null;
             }
 
@@ -134,7 +134,7 @@ namespace WINI_Tool.Data.Base
 
             if (!iniKey.IsOfType(defaultValue.GetType()))
             {
-                Debug.Print(string.Format("INISection::GetValue(%s, %d) - invalid type", key, defaultValue));
+                Debug.Print(string.Format("INISection::GetValue({0}, {1}) - invalid type", key, defaultValue));
                 return defaultValue;
             }
 
@@ -150,7 +150,7 @@ namespace WINI_Tool.Data.Base
 
             if (!iniKey.IsOfType(defaultValue.GetType()))
             {
-                Debug.Print(string.Format("INISection::GetValue(%s, %d) - invalid type", key, defaultValue));
+                Debug.Print(string.Format("INISection::GetValue({0}, {1}) - invalid type", key, defaultValue));
                 return defaultValue;
             }
 
@@ -166,7 +166,7 @@ namespace WINI_Tool.Data.Base
 
             if (!iniKey.IsOfType(defaultValue.GetType()))
             {
-                Debug.Print(string.Format("INISection::GetValue(%s, %d) - invalid type", key, defaultValue));
+                Debug.Print(string.Format("INISection::GetValue({0}, {1}) - invalid type", key, defaultValue));
                 return defaultValue;
             }
 
@@ -182,7 +182,7 @@ namespace WINI_Tool.Data.Base
 
             if (!iniKey.IsOfType(defaultValue.GetType()))
             {
-                Debug.Print(string.Format("INISection::GetValue(%s, %d) - invalid type", key, defaultValue));
+                Debug.Print(string.Format("INISection::GetValue({0}, {1}) - invalid type", key, defaultValue));
                 return defaultValue;
             }
 

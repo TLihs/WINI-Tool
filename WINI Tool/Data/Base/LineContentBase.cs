@@ -30,7 +30,7 @@ namespace WINI_Tool.Data.Base
         private string _text;
         private LineContentBase _nextContent;
         private LineContentBase _previousContent;
-        private int _errorList;
+        private uint _errorList;
         private INIContentType _contentType;
 
         public INIReader Reader => _reader;        
@@ -125,7 +125,7 @@ namespace WINI_Tool.Data.Base
             }
         }
         public long Length => _text.Length;
-        public int Errors => _errorList;
+        public uint Errors => _errorList;
         public INIContentType ContentType => _contentType;
 
         public LineContentBase(INIReader reader, long positionStart, string lineContent, LineContentBase previousContent = null, LineContentBase nextContent = null)
@@ -175,22 +175,22 @@ namespace WINI_Tool.Data.Base
             {
                 case INIContentType.Empty:
                     if (!string.IsNullOrWhiteSpace(_text))
-                        _errorList |= ERR_LINECONTENT_NOMATCH;
+                        _errorList |= (uint)WT_ERROR.WT_E_LINECONTENT_NOMATCH;
                     break;
 
                 case INIContentType.Section:
                     if (RXInvalidChars.IsMatch(_text))
-                        _errorList |= ERR_SECTION_INVALIDCHAR;
+                        _errorList |= (uint)WT_ERROR.WT_E_SECTION_INVALIDCHAR;
                     break;
 
                 case INIContentType.Group:
                     if (RXInvalidChars.IsMatch(_text))
-                        _errorList |= ERR_GROUP_INVALIDCHAR;
+                        _errorList |= (uint)WT_ERROR.WT_E_GROUP_INVALIDCHAR;
                     break;
 
                 case INIContentType.Key:
                     if (RXInvalidKeyChars.IsMatch(_text))
-                        _errorList |= ERR_KEY_INVALIDCHAR;
+                        _errorList |= (uint)WT_ERROR.WT_E_KEY_INVALIDCHAR;
                     break;
 
                 case INIContentType.Comment:

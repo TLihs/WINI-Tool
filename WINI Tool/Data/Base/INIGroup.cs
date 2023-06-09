@@ -25,7 +25,7 @@ namespace WINI_Tool.Data
         {
             if (!RXGroupName.IsMatch(lineContent.Text))
             {
-                Debug.Print(string.Format("INIGroup::Create(%s) - content doesn't match format", lineContent.Text));
+                Debug.Print(string.Format("INIGroup::Create({0}) - content doesn't match format", lineContent.Text));
                 return null;
             }
             

@@ -2,12 +2,10 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
-using System.Linq;
-using System.Security.Cryptography.X509Certificates;
-using System.Text;
+using System.Runtime.InteropServices;
 using System.Threading.Tasks;
-
-using static WINI_Tool.Support.Constants;
+using System.Windows.Threading;
+using static WPFExceptionHandler.ExceptionManagement;
 
 namespace WINI_Tool.Support
 {
@@ -16,70 +14,77 @@ namespace WINI_Tool.Support
         private static string _logFilePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "WINI Tool", "Log", "debug.log");
         private static StreamWriter _logFileStream;
         
-        public const int ERR_LINECONTENT_NOMATCH = 0x_0001;
-        public const int ERR_SECTION_NOMATCH = 0x_0002;
-        public const int ERR_GROUP_NOMATCH = 0x_0004;
-        public const int ERR_KEY_NOMATCH = 0x_0006;
-        public const int ERR_SECTION_INVALIDCHAR = 0x_0008;
-        public const int ERR_GROUP_INVALIDCHAR = 0x_0010;
-        public const int ERR_KEY_INVALIDCHAR = 0x_0020;
+        public enum WT_ERROR : uint
+        {
+            WT_E_FAULTNOTIMPLEMENTED = 0x_80000000,
 
-        public const int ERR_FUNCTION_NOTIMPLEMENTED = 0x_0040;
+            WT_E_LINECONTENT_NOMATCH = 0x_80000001,
+            WT_E_SECTION_NOMATCH = 0x_80000002,
+            WT_E_GROUP_NOMATCH = 0x_80000003,
+            WT_E_KEY_NOMATCH = 0x_80000004,
 
-        public const int ERR_TYPING_CSTYPEINVALID = 0x_0060;
+            WT_E_SECTION_INVALIDCHAR = 0x_80000005,
+            WT_E_GROUP_INVALIDCHAR = 0x_80000010,
+            WT_E_KEY_INVALIDCHAR = 0x_80000011,
+            WT_E_FUNCTION_NOTIMPLEMENTED = 0x_80000012,
 
-        public static string LogFilePath => _logFilePath;
+            WT_E_TYPING_CSTYPEINVALID = 0x_80000100,
+            WT_E_TYPING_INITYPEINVALID = 0x_80000101,
+            WT_E_TYPING_INITYPEINOTIMPLEMENTED = 0x_80000102
+        }
+
+    public static string LogFilePath => _logFilePath;
 
         static ExceptionHandling()
         {
-            FileInfo fileinfo = new FileInfo(_logFilePath);
-            Directory.CreateDirectory(fileinfo.DirectoryName);
-            if (!fileinfo.Exists)
-                File.WriteAllText(fileinfo.FullName, ": Log created.");
-            else
-                File.AppendAllText(fileinfo.FullName, ": Log opened.");
 
-            _logFileStream = new StreamWriter(_logFilePath);
-            Debug.Listeners.Add(new TextWriterTraceListener(_logFileStream));
-            Debug.Print(DateTime.Now.ToString() + ": Exception Handling initialized.");
         }
 
-        private static string ErrorToString(int error)
+        public static void Create(string logPath = "")
         {
-            List<string> errors = new List<string>();
-            
-            if ((error & ERR_LINECONTENT_NOMATCH) == ERR_LINECONTENT_NOMATCH)
-                errors.Add("line content does not match any regular expression");
-            if ((error & ERR_SECTION_INVALIDCHAR) == ERR_SECTION_INVALIDCHAR)
-                errors.Add("section name contains illegal char");
-            if ((error & ERR_GROUP_INVALIDCHAR) == ERR_GROUP_INVALIDCHAR)
-                errors.Add("group name contains illegal char");
-            if ((error & ERR_KEY_INVALIDCHAR) == ERR_KEY_INVALIDCHAR)
-                errors.Add("key name contains illegal char");
-
-            if ((error & ERR_FUNCTION_NOTIMPLEMENTED) == ERR_FUNCTION_NOTIMPLEMENTED)
-                errors.Add("function not implemented");
-
-            if ((error & ERR_TYPING_CSTYPEINVALID) == ERR_TYPING_CSTYPEINVALID)
-                errors.Add("type not implemented");
-
-            return string.Join("\r\n", errors);
+            Debug.Print("Initializing ExceptionHandling...");
+            CreateExceptionManagement(App.Current, AppDomain.CurrentDomain, true);
+            Debug.Print("ExceptionHandling initialized.");
         }
 
-        public static void LogFault(int errorCode, string additionalInfo = null)
+        private static string ErrorToString(WT_ERROR error)
         {
-            Debug.Print(DateTime.Now.ToString() + ": " 
-                + (string.IsNullOrEmpty(additionalInfo) ? "" : " - " + additionalInfo)
-                + ErrorToString(errorCode)
-                + "(" + string.Format("0x{%d}", errorCode.ToString("X4")) + ")");
-        }
-        
-        private static void SafeThrowException(Exception ex)
-        {
-            
+            switch (error)
+            {
+                case WT_ERROR.WT_E_LINECONTENT_NOMATCH:
+                    return "Line content does not match any regular expression.";
+                case WT_ERROR.WT_E_SECTION_INVALIDCHAR:
+                    return "Section name contains illegal char.";
+                case WT_ERROR.WT_E_GROUP_INVALIDCHAR:
+                    return "Group name contains illegal char.";
+                case WT_ERROR.WT_E_KEY_INVALIDCHAR:
+                    return "Key name contains illegal char.";
+
+                case WT_ERROR.WT_E_FUNCTION_NOTIMPLEMENTED:
+                    return "Function not implemented.";
+
+                case WT_ERROR.WT_E_TYPING_CSTYPEINVALID:
+                    return "C# type not implemented.";
+                case WT_ERROR.WT_E_TYPING_INITYPEINVALID:
+                    return "INI type invalid {0}.";
+                case WT_ERROR.WT_E_TYPING_INITYPEINOTIMPLEMENTED:
+                    return "INI type not implemented {0}.";
+
+                default:
+                    return "<not_implemented>";
+            }
         }
 
-        private static void LogException(Exception ex)
+        public static void LogDebug(string message)
+        {
+        }
+
+        public static void LogGenericError(Exception e,  string message = null)
+        {
+            LogGenericError(e);
+        }
+
+        public static void LogFault(WT_ERROR errorCode, string additionalInfo = null)
         {
 
         }

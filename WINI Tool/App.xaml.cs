@@ -6,6 +6,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 
+using WINI_Tool.Support;
+
 namespace WINI_Tool
 {
     /// <summary>
@@ -13,5 +15,9 @@ namespace WINI_Tool
     /// </summary>
     public partial class App : Application
     {
+        App()
+        {
+            ExceptionHandling.Create();
+        }
     }
 }

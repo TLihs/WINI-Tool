@@ -63,7 +63,7 @@ namespace WINI_Tool.Data.Base
 
             if (!match.Success)
             {
-                Debug.Print(string.Format("INIKey::Create(%s) - key doesn't match key format", lineContent.Text));
+                Debug.Print(string.Format("INIKey::Create({0}) - key doesn't match key format", lineContent.Text));
                 return null;
             }
 
@@ -73,7 +73,7 @@ namespace WINI_Tool.Data.Base
             
             if (string.IsNullOrWhiteSpace(key))
             {
-                Debug.Print(string.Format("INIKey::Create(%s, %s, %s, %s) - key is null or whitespace", lineContent, key, value, iscomment ? "as comment" : "not as comment"));
+                Debug.Print(string.Format("INIKey::Create({0}, {1}, {2}, {3}) - key is null or whitespace", lineContent, key, value, iscomment ? "as comment" : "not as comment"));
                 return null;
             }
 
@@ -136,7 +136,7 @@ namespace WINI_Tool.Data.Base
                 return bool.TryParse(Value, out outvalue);
             }
 
-            Debug.Print(string.Format("INIKeys::IsOfType(%s) - Not a valid type.", type.FullName));
+            Debug.Print(string.Format("INIKeys::IsOfType({0}) - Not a valid type.", type.FullName));
             return false;
         }
     }

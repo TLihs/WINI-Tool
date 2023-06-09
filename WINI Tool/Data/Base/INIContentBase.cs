@@ -25,7 +25,7 @@ namespace WINI_Tool.Data.Base
 
         protected virtual void EvaluateContent()
         {
-            LogFault(ERR_FUNCTION_NOTIMPLEMENTED, "INIContentBase::EvaluateContent()");
+            LogFault(WT_ERROR.WT_E_FUNCTION_NOTIMPLEMENTED, "INIContentBase::EvaluateContent()");
         }
     }
 }
