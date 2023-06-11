@@ -1,4 +1,9 @@
-﻿using static WINI_Tool.Support.ExceptionHandling;
+﻿// WINI Tool
+// Copyright (c) 2023 Toni Lihs
+// Licensed under MIT License
+
+using static WINI_Tool.Support.ExceptionHandling;
+using static WINI_Tool.Data.Editor.EditorVisualization;
 
 namespace WINI_Tool.Data.Base
 {
@@ -25,7 +30,7 @@ namespace WINI_Tool.Data.Base
 
         protected virtual void EvaluateContent()
         {
-            LogFault(WT_ERROR.WT_E_FUNCTION_NOTIMPLEMENTED, "INIContentBase::EvaluateContent()");
+            Log(EXCEPTIONTYPES.ERR_FUNCTION_NOTIMPLEMENTED, "INIContentBase::EvaluateContent()");
         }
     }
 }

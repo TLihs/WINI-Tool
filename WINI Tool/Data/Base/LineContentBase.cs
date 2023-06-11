@@ -1,4 +1,8 @@
-﻿using System;
+﻿// WINI Tool
+// Copyright (c) 2023 Toni Lihs
+// Licensed under MIT License
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -7,6 +11,7 @@ using System.Windows.Media.Animation;
 
 using static WINI_Tool.Support.Constants;
 using static WINI_Tool.Support.ExceptionHandling;
+using static WINI_Tool.Data.Editor.EditorVisualization;
 
 namespace WINI_Tool.Data.Base
 {
@@ -175,22 +180,22 @@ namespace WINI_Tool.Data.Base
             {
                 case INIContentType.Empty:
                     if (!string.IsNullOrWhiteSpace(_text))
-                        _errorList |= (uint)WT_ERROR.WT_E_LINECONTENT_NOMATCH;
+                        _errorList |= (uint)MARKING.ERR_LINECONTENT_NOMATCH;
                     break;
 
                 case INIContentType.Section:
                     if (RXInvalidChars.IsMatch(_text))
-                        _errorList |= (uint)WT_ERROR.WT_E_SECTION_INVALIDCHAR;
+                        _errorList |= (uint)MARKING.ERR_SECTION_INVALIDCHAR;
                     break;
 
                 case INIContentType.Group:
                     if (RXInvalidChars.IsMatch(_text))
-                        _errorList |= (uint)WT_ERROR.WT_E_GROUP_INVALIDCHAR;
+                        _errorList |= (uint)MARKING.ERR_GROUP_INVALIDCHAR;
                     break;
 
                 case INIContentType.Key:
                     if (RXInvalidKeyChars.IsMatch(_text))
-                        _errorList |= (uint)WT_ERROR.WT_E_KEY_INVALIDCHAR;
+                        _errorList |= (uint)MARKING.ERR_KEY_INVALIDCHAR;
                     break;
 
                 case INIContentType.Comment:

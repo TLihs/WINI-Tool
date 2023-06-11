@@ -1,92 +1,107 @@
-﻿using System;
-using System.Collections.Generic;
+﻿// WINI Tool
+// Copyright (c) 2023 Toni Lihs
+// Licensed under MIT License
+
+using System;
 using System.Diagnostics;
 using System.IO;
-using System.Runtime.InteropServices;
-using System.Threading.Tasks;
-using System.Windows.Threading;
+
 using static WPFExceptionHandler.ExceptionManagement;
+using static WINI_Tool.Data.Editor.EditorVisualization;
 
 namespace WINI_Tool.Support
 {
     public static class ExceptionHandling
     {
-        private static string _logFilePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "WINI Tool", "Log", "debug.log");
-        private static StreamWriter _logFileStream;
-        
-        public enum WT_ERROR : uint
+        public enum EXCEPTIONTYPES : uint
         {
-            WT_E_FAULTNOTIMPLEMENTED = 0x_80000000,
+            ERR_FUNCTION_NOTIMPLEMENTED = 0x_8000_0000,
 
-            WT_E_LINECONTENT_NOMATCH = 0x_80000001,
-            WT_E_SECTION_NOMATCH = 0x_80000002,
-            WT_E_GROUP_NOMATCH = 0x_80000003,
-            WT_E_KEY_NOMATCH = 0x_80000004,
+            ERR_EH_FILELOGGINGDEACTIVATED = 0x_8000_0011,
 
-            WT_E_SECTION_INVALIDCHAR = 0x_80000005,
-            WT_E_GROUP_INVALIDCHAR = 0x_80000010,
-            WT_E_KEY_INVALIDCHAR = 0x_80000011,
-            WT_E_FUNCTION_NOTIMPLEMENTED = 0x_80000012,
-
-            WT_E_TYPING_CSTYPEINVALID = 0x_80000100,
-            WT_E_TYPING_INITYPEINVALID = 0x_80000101,
-            WT_E_TYPING_INITYPEINOTIMPLEMENTED = 0x_80000102
+            ERR_TYPING_CSTYPEINVALID = 0x_8000_0020,
+            ERR_TYPING_INITYPEINVALID = 0x_8000_0021,
+            ERR_TYPING_INITYPEINOTIMPLEMENTED = 0x_8000_0022,
         }
 
-    public static string LogFilePath => _logFilePath;
+        public static bool UseFileLogging => EHUseFileLogging;
+        public static string LogFilePath
+        {
+            get
+            {
+                if (!EHUseFileLogging)
+                    Log(EXCEPTIONTYPES.ERR_EH_FILELOGGINGDEACTIVATED, string.Empty);
+                return EHUseFileLogging ? EHExceptionLogFilePath : string.Empty;
+            }
+            set
+            {
+                if (!EHUseFileLogging)
+                    Log(EXCEPTIONTYPES.ERR_EH_FILELOGGINGDEACTIVATED, string.Empty);
+                else
+                    SetAlternativeLogFilePath(value);
+            }
+        }
 
         static ExceptionHandling()
         {
 
         }
 
-        public static void Create(string logPath = "")
+        public static void Create(bool useFileLogging, string logPath = "")
         {
             Debug.Print("Initializing ExceptionHandling...");
-            CreateExceptionManagement(App.Current, AppDomain.CurrentDomain, true);
+            CreateExceptionManagement(App.Current, AppDomain.CurrentDomain, true, useFileLogging);
+            if (!string.IsNullOrEmpty(logPath))
+                SetAlternativeLogFilePath(logPath);
             Debug.Print("ExceptionHandling initialized.");
         }
 
-        private static string ErrorToString(WT_ERROR error)
+        public static string ExceptionToString(EXCEPTIONTYPES exceptionType)
         {
-            switch (error)
+            switch (exceptionType)
             {
-                case WT_ERROR.WT_E_LINECONTENT_NOMATCH:
-                    return "Line content does not match any regular expression.";
-                case WT_ERROR.WT_E_SECTION_INVALIDCHAR:
-                    return "Section name contains illegal char.";
-                case WT_ERROR.WT_E_GROUP_INVALIDCHAR:
-                    return "Group name contains illegal char.";
-                case WT_ERROR.WT_E_KEY_INVALIDCHAR:
-                    return "Key name contains illegal char.";
-
-                case WT_ERROR.WT_E_FUNCTION_NOTIMPLEMENTED:
+                case EXCEPTIONTYPES.ERR_FUNCTION_NOTIMPLEMENTED:
                     return "Function not implemented.";
 
-                case WT_ERROR.WT_E_TYPING_CSTYPEINVALID:
-                    return "C# type not implemented.";
-                case WT_ERROR.WT_E_TYPING_INITYPEINVALID:
-                    return "INI type invalid {0}.";
-                case WT_ERROR.WT_E_TYPING_INITYPEINOTIMPLEMENTED:
-                    return "INI type not implemented {0}.";
+                case EXCEPTIONTYPES.ERR_EH_FILELOGGINGDEACTIVATED:
+                    return "Logging to file not active.";
 
                 default:
-                    return "<not_implemented>";
+                    return string.Format("<{0}>", Enum.GetName(typeof(EXCEPTIONTYPES), exceptionType));
             }
         }
 
-        public static void LogDebug(string message)
+        public static void Log(EXCEPTIONTYPES type, string message)
         {
+            EHLogGenericError(string.Format("{0} ({1})", ExceptionToString(type), message));
         }
 
-        public static void LogGenericError(Exception e,  string message = null)
+        public static void Log(LogEntryType type, string message)
         {
-            LogGenericError(e);
+            switch (type)
+            {
+                case LogEntryType.LE_WARNING:
+                    EHLogWarning(message);
+                    break;
+
+                case LogEntryType.LE_ERROR_GENERIC:
+                    EHLogGenericError(message);
+                    break;
+
+                case LogEntryType.LE_ERROR_CRITICAL:
+                    EHLogCriticalError(message);
+                    break;
+
+                default:
+                    EHLogDebug(message);
+                    break;
+            }
         }
 
-        public static void LogFault(WT_ERROR errorCode, string additionalInfo = null)
-        {
-
-        }
+        public static void LogDebug(string message) => EHLogDebug(message);
+        public static void LogWarning(string message) => EHLogWarning(message);
+        public static void LogGenericError(string message) => EHLogGenericError(message);
+        public static void LogGenericError(Exception exception) => EHLogGenericError(exception);
+        public static void LogCriticalError(Exception exception) => EHLogCriticalError(exception);
     }
 }

@@ -77,10 +77,14 @@
     <Compile Include="Controls\INISettingsControl.xaml.cs">
       <DependentUpon>INISettingsControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Controls\TextSearchControl.xaml.cs">
+      <DependentUpon>TextSearchControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Data\Base\INIContentBase.cs" />
     <Compile Include="Data\Base\INIComment.cs" />
     <Compile Include="Data\Base\LineContentBase.cs" />
     <Compile Include="Data\Base\INIGroup.cs" />
+    <Compile Include="Data\Editor\EditorVisualization.cs" />
     <Compile Include="Data\Project Management\INITemplateTargetPair.cs" />
     <Compile Include="Data\Project Management\Project.cs" />
     <Compile Include="Data\Project Management\ProjectManager.cs" />
@@ -99,6 +103,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Controls\INISettingsControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\TextSearchControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -136,6 +144,55 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <None Include=".editorconfig" />
+    <Resource Include="Fonts\CascadiaCode-Bold.ttf" />
+    <Resource Include="Fonts\CascadiaCode-BoldItalic.ttf" />
+    <Resource Include="Fonts\CascadiaCode-ExtraLight.ttf" />
+    <Resource Include="Fonts\CascadiaCode-ExtraLightItalic.ttf" />
+    <Resource Include="Fonts\CascadiaCode-Italic.ttf" />
+    <Resource Include="Fonts\CascadiaCode-Light.ttf" />
+    <Resource Include="Fonts\CascadiaCode-LightItalic.ttf" />
+    <Resource Include="Fonts\CascadiaCode-Regular.ttf" />
+    <Resource Include="Fonts\CascadiaCode-SemiBold.ttf" />
+    <Resource Include="Fonts\CascadiaCode-SemiBoldItalic.ttf" />
+    <Resource Include="Fonts\CascadiaCode-SemiLight.ttf" />
+    <Resource Include="Fonts\CascadiaCode-SemiLightItalic.ttf" />
+    <Resource Include="Fonts\CascadiaCodePL-Bold.ttf" />
+    <Resource Include="Fonts\CascadiaCodePL-BoldItalic.ttf" />
+    <Resource Include="Fonts\CascadiaCodePL-ExtraLight.ttf" />
+    <Resource Include="Fonts\CascadiaCodePL-ExtraLightItalic.ttf" />
+    <Resource Include="Fonts\CascadiaCodePL-Italic.ttf" />
+    <Resource Include="Fonts\CascadiaCodePL-Light.ttf" />
+    <Resource Include="Fonts\CascadiaCodePL-LightItalic.ttf" />
+    <Resource Include="Fonts\CascadiaCodePL-Regular.ttf" />
+    <Resource Include="Fonts\CascadiaCodePL-SemiBold.ttf" />
+    <Resource Include="Fonts\CascadiaCodePL-SemiBoldItalic.ttf" />
+    <Resource Include="Fonts\CascadiaCodePL-SemiLight.ttf" />
+    <Resource Include="Fonts\CascadiaCodePL-SemiLightItalic.ttf" />
+    <Resource Include="Fonts\CascadiaMono-Bold.ttf" />
+    <Resource Include="Fonts\CascadiaMono-BoldItalic.ttf" />
+    <Resource Include="Fonts\CascadiaMono-ExtraLight.ttf" />
+    <Resource Include="Fonts\CascadiaMono-ExtraLightItalic.ttf" />
+    <Resource Include="Fonts\CascadiaMono-Italic.ttf" />
+    <Resource Include="Fonts\CascadiaMono-Light.ttf" />
+    <Resource Include="Fonts\CascadiaMono-LightItalic.ttf" />
+    <Resource Include="Fonts\CascadiaMono-Regular.ttf" />
+    <Resource Include="Fonts\CascadiaMono-SemiBold.ttf" />
+    <Resource Include="Fonts\CascadiaMono-SemiBoldItalic.ttf" />
+    <Resource Include="Fonts\CascadiaMono-SemiLight.ttf" />
+    <Resource Include="Fonts\CascadiaMono-SemiLightItalic.ttf" />
+    <Resource Include="Fonts\CascadiaMonoPL-Bold.ttf" />
+    <Resource Include="Fonts\CascadiaMonoPL-BoldItalic.ttf" />
+    <Resource Include="Fonts\CascadiaMonoPL-ExtraLight.ttf" />
+    <Resource Include="Fonts\CascadiaMonoPL-ExtraLightItalic.ttf" />
+    <Resource Include="Fonts\CascadiaMonoPL-Italic.ttf" />
+    <Resource Include="Fonts\CascadiaMonoPL-Light.ttf" />
+    <Resource Include="Fonts\CascadiaMonoPL-LightItalic.ttf" />
+    <Resource Include="Fonts\CascadiaMonoPL-Regular.ttf" />
+    <Resource Include="Fonts\CascadiaMonoPL-SemiBold.ttf" />
+    <Resource Include="Fonts\CascadiaMonoPL-SemiBoldItalic.ttf" />
+    <Resource Include="Fonts\CascadiaMonoPL-SemiLight.ttf" />
+    <Resource Include="Fonts\CascadiaMonoPL-SemiLightItalic.ttf" />
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
@@ -151,5 +208,6 @@
       <Name>WPFExceptionHandler</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

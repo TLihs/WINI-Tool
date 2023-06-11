@@ -1,4 +1,8 @@
-﻿namespace WINI_Tool.Data.Base.Base
+﻿// WINI Tool
+// Copyright (c) 2023 Toni Lihs
+// Licensed under MIT License
+
+namespace WINI_Tool.Data.Base.Base
 {
     public abstract class INIComment : INIContentBase
     {

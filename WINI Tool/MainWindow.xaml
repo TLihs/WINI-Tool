@@ -6,11 +6,13 @@
         xmlns:local="clr-namespace:WINI_Tool"
         xmlns:controls="clr-namespace:WINI_Tool.Controls"
         mc:Ignorable="d"
-        Title="MainWindow" Height="720" Width="1280">
+        Title="MainWindow" Height="720" Width="1280"
+        Background="#1D1D1D">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="25"/>
             <RowDefinition Height="*"/>
+            <RowDefinition Height="auto"/>
             <RowDefinition Height="28"/>
         </Grid.RowDefinitions>
 
@@ -18,7 +20,14 @@
             
         </Menu>
 
-        <StatusBar Grid.Row="2">
+        <Grid x:Name="SearchResults"
+              Grid.Row="2" Grid.RowSpan="1"
+              Visibility="Collapsed"
+              Height="140">
+            
+        </Grid>
+
+        <StatusBar Grid.Row="3">
             
         </StatusBar>
         

@@ -1,4 +1,8 @@
-﻿using System.Collections.Generic;
+﻿// WINI Tool
+// Copyright (c) 2023 Toni Lihs
+// Licensed under MIT License
+
+using System.Collections.Generic;
 using System.IO;
 using System.Text;
 

@@ -4,6 +4,9 @@
              xmlns:local="clr-namespace:WINI_Tool"
              StartupUri="MainWindow.xaml">
     <Application.Resources>
-         
+        <FontFamily x:Key="CascadiaCode">pack://application:,,,/Fonts/#Cascadia Code</FontFamily>
+        <FontFamily x:Key="CascadiaCodePL">pack://application:,,,/Fonts/#Cascadia Code PL</FontFamily>
+        <FontFamily x:Key="CascadiaMono">pack://application:,,,/Fonts/#Cascadia Mono</FontFamily>
+        <FontFamily x:Key="CascadiaMonoPL">pack://application:,,,/Fonts/#Cascadia Mono PL</FontFamily>
     </Application.Resources>
 </Application>

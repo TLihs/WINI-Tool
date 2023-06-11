@@ -1,4 +1,8 @@
-﻿using System;
+﻿// WINI Tool
+// Copyright (c) 2023 Toni Lihs
+// Licensed under MIT License
+
+using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
@@ -17,7 +21,7 @@ namespace WINI_Tool
     {
         App()
         {
-            ExceptionHandling.Create();
+            ExceptionHandling.Create(true);
         }
     }
 }

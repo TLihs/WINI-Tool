@@ -1,12 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
+﻿// WINI Tool
+// Copyright (c) 2023 Toni Lihs
+// Licensed under MIT License
+
+using System;
 using System.IO;
-using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
-using System.Xml.XPath;
 
 using static WINI_Tool.Support.ExceptionHandling;
 
@@ -23,7 +21,7 @@ namespace WINI_Tool.Support
         private const string _leadingWhiteSpace = @"^\s+(.*)$";
         private const string _followingWhiteSpace = @"^(.*)\s+$";
         private const string _invalidCharsPattern = @"[^a-zA-Z0-9]";
-        private const string _invalidKeyCharsPattern = @"([^a-zA-Z0-9].*)+=(.*)";
+        private const string _invalidKeyCharsPattern = @"(" + _invalidCharsPattern + ".*)+=(.*)";
 
         public static Regex RXKeyValuePair = new Regex(_keyValuePairPattern, RegexOptions.Compiled | RegexOptions.Singleline | RegexOptions.IgnoreCase, TimeSpan.FromMilliseconds(500));
         public static Regex RXSectionName = new Regex(_sectionNamePattern, RegexOptions.Compiled | RegexOptions.Singleline | RegexOptions.IgnoreCase, TimeSpan.FromMilliseconds(500));
@@ -87,7 +85,6 @@ namespace WINI_Tool.Support
                 if (type == typeof(string))
                     return KeyValueTypes.String;
 
-                LogFault(WT_ERROR.WT_E_TYPING_CSTYPEINVALID, string.Format("type= '{{0}}'", type.Name));
                 return KeyValueTypes.Invalid;
             }
 
@@ -106,10 +103,10 @@ namespace WINI_Tool.Support
                     case KeyValueTypes.DateTime:
                         return typeof(DateTime);
                     case KeyValueTypes.Invalid:
-                        LogFault(WT_ERROR.WT_E_TYPING_INITYPEINVALID, string.Format("Type is 'INVALID'. Parsing as string recommended."));
+                        Log(EXCEPTIONTYPES.ERR_TYPING_INITYPEINVALID, string.Format("Type is 'INVALID'. Parsing as string recommended."));
                         return typeof(string);
                     default:
-                        LogFault(WT_ERROR.WT_E_TYPING_INITYPEINOTIMPLEMENTED, string.Format("type= '{0}'", Enum.GetName(typeof(KeyValueTypes), type)));
+                        Log(EXCEPTIONTYPES.ERR_TYPING_INITYPEINOTIMPLEMENTED, string.Format("type= '{0}'", Enum.GetName(typeof(KeyValueTypes), type)));
                         return null;
                 }
             }

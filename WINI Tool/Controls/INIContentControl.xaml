@@ -7,7 +7,10 @@
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid>
-        <RichTextBox x:Name="RichTextBox_INIContent"
-                     Background="#121212" Foreground="#EEEEEE"/>
+        <RichTextBox x:Name="RichTextBox_INIContent" FontFamily="{StaticResource CascadiaCode}"
+                     Background="#202020" Foreground="#EEEEEE"
+                     IsUndoEnabled="True" IsReadOnly="False"
+                     TextChanged="RichTextBox_INIContent_TextChanged"
+                     PreviewKeyDown="RichTextBox_INIContent_PreviewKeyDown"/>
     </Grid>
 </UserControl>
