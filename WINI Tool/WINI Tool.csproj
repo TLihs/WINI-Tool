@@ -87,11 +87,13 @@
     <Compile Include="Data\Editor\EditorVisualization.cs" />
     <Compile Include="Data\Project Management\INITemplateTargetPair.cs" />
     <Compile Include="Data\Project Management\Project.cs" />
+    <Compile Include="Data\Project Management\ProjectFileFormatter.cs" />
     <Compile Include="Data\Project Management\ProjectManager.cs" />
+    <Compile Include="Data\Project Management\ProjectSettings.cs" />
+    <Compile Include="Data\Search\TextSearchResultInfo.cs" />
     <Compile Include="Settings\FileSettings.cs" />
     <Compile Include="Settings\MergeSettings.cs" />
     <Compile Include="Settings\ProjectManagerSettings.cs" />
-    <Compile Include="Settings\ProjectSettings.cs" />
     <Compile Include="Support\Constants.cs" />
     <Compile Include="Support\ExceptionHandling.cs" />
     <Page Include="Controls\DarkModeDictionary.xaml">

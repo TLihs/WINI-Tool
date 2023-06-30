@@ -6,10 +6,57 @@
         xmlns:local="clr-namespace:WINI_Tool.Controls"
         x:Name="Control_TextSearchControl"
         mc:Ignorable="d"
-        Title="TextSearchControl" Height="350" Width="500">
-    <Grid>
-        <TabControl>
-            <TabItem Header="Search">
+        Title="TextSearchControl" Height="400" Width="500"
+        WindowStartupLocation="CenterOwner"
+        ScrollViewer.VerticalScrollBarVisibility="Disabled"
+        Topmost="True" WindowStyle="ToolWindow">
+    <Window.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="DarkModeDictionary.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </Window.Resources>
+    
+    <Grid Background="{StaticResource Control_Background_DarkMode}">
+        <TabControl x:Name="TabControl_Type"
+                    Background="{StaticResource Control_Background_DarkMode}"
+                    Foreground="{StaticResource Control_Foreground_DarkMode}"
+                    BorderBrush="{StaticResource Control_Border_DarkMode}"
+                    ScrollViewer.VerticalScrollBarVisibility="Disabled"
+                    SelectionChanged="TabControl_Type_SelectionChanged">
+            <TabControl.Resources>
+                <Style TargetType="{x:Type TabPanel}">
+                    <Setter Property="Background" Value="{StaticResource Control_Background_DarkMode}"/>
+                </Style>
+                <Style TargetType="{x:Type TabItem}">
+                    <Setter Property="BorderThickness" Value="0"/>
+                    <Setter Property="Padding" Value="0" />
+                    <Setter Property="HeaderTemplate">
+                        <Setter.Value>
+                            <DataTemplate DataType="TabItem">
+                                <Border x:Name="grid"
+                                        Background="{StaticResource Control_Background_DarkMode}"
+                                        BorderBrush="{StaticResource Control_Border_DarkMode}">
+                                    <Label x:Name="text"
+                                           Content="{TemplateBinding Content}"
+                                           Margin="1, 0"
+                                           Foreground="{StaticResource Control_Foreground_DarkMode}"/>
+                                </Border>
+                                <DataTemplate.Triggers>
+                                    <DataTrigger Binding="{Binding RelativeSource={RelativeSource Mode=FindAncestor,AncestorType={x:Type TabItem}}, Path=IsSelected}" Value="True">
+                                        <Setter TargetName="grid" Property="Background" Value="{StaticResource FocusedControl_Background_DarkMode}"/>
+                                        <Setter TargetName="text" Property="Foreground" Value="{StaticResource FocusedControl_Foreground_DarkMode}"/>
+                                        <Setter TargetName="text" Property="FontSize" Value="12"/>
+                                    </DataTrigger>
+                                </DataTemplate.Triggers>
+                            </DataTemplate>
+                        </Setter.Value>
+                    </Setter>
+                </Style>
+            </TabControl.Resources>
+
+            <TabItem Header="Search" ScrollViewer.VerticalScrollBarVisibility="Disabled">
                 <Grid Margin="10">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="*"/>
@@ -37,58 +84,72 @@
 
                         <TextBox x:Name="TextBox_SearchInput"
                                  Grid.Column="0" Grid.ColumnSpan="2"
-                                 Grid.Row="0" Grid.RowSpan="1"/>
+                                 Grid.Row="0" Grid.RowSpan="1"
+                                 Foreground="{StaticResource Input_Foreground_DarkMode}"
+                                 Background="{StaticResource Input_Background_DarkMode}"
+                                 BorderBrush="{StaticResource Input_Border_DarkMode}"
+                                 Height="23"/>
 
                         <CheckBox x:Name="CheckBox_SearchCaseSensitive"
                                   Grid.Column="0" Grid.ColumnSpan="2"
                                   Grid.Row="1" Grid.RowSpan="1"
                                   VerticalContentAlignment="Center"
-                                  Content="Search case sensitive"/>
+                                  Content="Search case sensitive"
+                                  Foreground="{StaticResource Control_Foreground_DarkMode}"/>
 
                         <CheckBox x:Name="CheckBox_SearchWholeWord"
                                   Grid.Column="0" Grid.ColumnSpan="2"
                                   Grid.Row="2" Grid.RowSpan="1"
                                   VerticalContentAlignment="Center"
-                                  Content="Search whole word only"/>
+                                  Content="Search whole word only"
+                                  Foreground="{StaticResource Control_Foreground_DarkMode}"/>
 
                         <Label Grid.Column="0" Grid.ColumnSpan="1"
                                Grid.Row="3" Grid.RowSpan="1"
-                               Content="Search in:"/>
+                               Content="Search in:"
+                               Foreground="{StaticResource Control_Foreground_DarkMode}"/>
                         
                         <ComboBox x:Name="ComboBox_SearchLocation"
                                   Grid.Column="1" Grid.ColumnSpan="1"
                                   Grid.Row="3" Grid.RowSpan="1"
-                                  AllowDrop="False" IsEditable="False" IsReadOnly="True"/>
+                                  AllowDrop="False" IsEditable="False" IsReadOnly="True"
+                                  Foreground="{StaticResource Control_Foreground_DarkMode}"
+                                  Background="{StaticResource Input_Background_DarkMode}"/>
 
                         <CheckBox x:Name="CheckBox_SearchInSections"
                                   Grid.Column="0" Grid.ColumnSpan="2"
                                   Grid.Row="4" Grid.RowSpan="1"
                                   VerticalContentAlignment="Center"
-                                  Content="Search in section names"/>
+                                  Content="Search in section names"
+                                  Foreground="{StaticResource Control_Foreground_DarkMode}"/>
 
                         <CheckBox x:Name="CheckBox_SearchInGroups"
                                   Grid.Column="0" Grid.ColumnSpan="2"
                                   Grid.Row="5" Grid.RowSpan="1"
                                   VerticalContentAlignment="Center"
-                                  Content="Search group names"/>
+                                  Content="Search in group names"
+                                  Foreground="{StaticResource Control_Foreground_DarkMode}"/>
 
                         <CheckBox x:Name="CheckBox_SearchInKeys"
                                   Grid.Column="0" Grid.ColumnSpan="2"
                                   Grid.Row="6" Grid.RowSpan="1"
                                   VerticalContentAlignment="Center"
-                                  Content="Search in key names"/>
+                                  Content="Search in key names"
+                                  Foreground="{StaticResource Control_Foreground_DarkMode}"/>
 
                         <CheckBox x:Name="CheckBox_SearchInValues"
                                   Grid.Column="0" Grid.ColumnSpan="2"
                                   Grid.Row="7" Grid.RowSpan="1"
                                   VerticalContentAlignment="Center"
-                                  Content="Search in key values"/>
+                                  Content="Search in key values"
+                                  Foreground="{StaticResource Control_Foreground_DarkMode}"/>
 
                         <CheckBox x:Name="CheckBox_SearchInComments"
                                   Grid.Column="0" Grid.ColumnSpan="2"
                                   Grid.Row="8" Grid.RowSpan="1"
                                   VerticalContentAlignment="Center"
-                                  Content="Search in comments"/>
+                                  Content="Search in comments"
+                                  Foreground="{StaticResource Control_Foreground_DarkMode}"/>
 
                     </Grid>
 
@@ -96,20 +157,180 @@
                           Margin="2">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="130"/>
+                            <ColumnDefinition Width="120"/>
+                            <ColumnDefinition Width="120"/>
                         </Grid.ColumnDefinitions>
 
-                        <Button Grid.Column="1" Grid.ColumnSpan="1"
+                        <Button x:Name="TextBox_Search_SearchNext"
+                                Grid.Column="1" Grid.ColumnSpan="1"
                                 Grid.Row="0" Grid.RowSpan="1"
-                                Margin="2" Content="Search All"/>
+                                Margin="4" Content="Search Next"
+                                Click="TextBox_Search_SearchNext_Click"/>
+
+                        <Button x:Name="TextBox_Search_SearchAll"
+                                Grid.Column="2" Grid.ColumnSpan="1"
+                                Grid.Row="0" Grid.RowSpan="1"
+                                Margin="4" Content="Search All"
+                                Click="TextBox_Search_SearchAll_Click"/>
                     </Grid>
 
                 </Grid>
 
             </TabItem>
             
-            <TabItem Header="Replace">
-                
+            <TabItem Header="Replace" ScrollViewer.VerticalScrollBarVisibility="Disabled">
+                <Grid Margin="10">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="80"/>
+                    </Grid.RowDefinitions>
+
+                    <Grid Grid.Row="0" Grid.RowSpan="1">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="180"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="25"/>
+                            <RowDefinition Height="25"/>
+                            <RowDefinition Height="25"/>
+                            <RowDefinition Height="25"/>
+                            <RowDefinition Height="25"/>
+                            <RowDefinition Height="25"/>
+                            <RowDefinition Height="25"/>
+                            <RowDefinition Height="25"/>
+                            <RowDefinition Height="25"/>
+                            <RowDefinition Height="25"/>
+                            <RowDefinition Height="25"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+
+                        <TextBox x:Name="TextBox_ReplaceInput"
+                                 Grid.Column="0" Grid.ColumnSpan="2"
+                                 Grid.Row="0" Grid.RowSpan="1"
+                                 Foreground="{StaticResource Input_Foreground_DarkMode}"
+                                 Background="{StaticResource Input_Background_DarkMode}"
+                                 BorderBrush="{StaticResource Input_Border_DarkMode}"
+                                 Height="23"/>
+
+                        <Label Grid.Column="0" Grid.ColumnSpan="1"
+                               Grid.Row="1" Grid.RowSpan="1"
+                               Content="Replace with:"
+                               Foreground="{StaticResource Control_Foreground_DarkMode}"/>
+
+                        <TextBox x:Name="TextBox_ReplaceOutput"
+                                 Grid.Column="1" Grid.ColumnSpan="1"
+                                 Grid.Row="1" Grid.RowSpan="1"
+                                 Foreground="{StaticResource Input_Foreground_DarkMode}"
+                                 Background="{StaticResource Input_Background_DarkMode}"
+                                 BorderBrush="{StaticResource Input_Border_DarkMode}"
+                                 Margin="-70,0,0,0"
+                                 Height="23"/>
+
+                        <CheckBox x:Name="CheckBox_ReplaceCaseSensitive"
+                                  Grid.Column="0" Grid.ColumnSpan="2"
+                                  Grid.Row="2" Grid.RowSpan="1"
+                                  VerticalContentAlignment="Center"
+                                  Content="Search case sensitive"
+                                  Foreground="{StaticResource Control_Foreground_DarkMode}"/>
+
+                        <CheckBox x:Name="CheckBox_ReplaceWholeWord"
+                                  Grid.Column="0" Grid.ColumnSpan="2"
+                                  Grid.Row="3" Grid.RowSpan="1"
+                                  VerticalContentAlignment="Center"
+                                  Content="Search whole word only"
+                                  Foreground="{StaticResource Control_Foreground_DarkMode}"/>
+
+                        <Label Grid.Column="0" Grid.ColumnSpan="1"
+                               Grid.Row="4" Grid.RowSpan="1"
+                               Content="Search in:"
+                               Foreground="{StaticResource Control_Foreground_DarkMode}"/>
+
+                        <ComboBox x:Name="ComboBox_ReplaceLocation"
+                                  Grid.Column="1" Grid.ColumnSpan="1"
+                                  Grid.Row="4" Grid.RowSpan="1"
+                                  AllowDrop="False" IsEditable="False" IsReadOnly="True"
+                                  Foreground="{StaticResource Control_Foreground_DarkMode}"
+                                  Background="{StaticResource Input_Background_DarkMode}"/>
+
+                        <CheckBox x:Name="CheckBox_ReplaceInSections"
+                                  Grid.Column="0" Grid.ColumnSpan="2"
+                                  Grid.Row="5" Grid.RowSpan="1"
+                                  VerticalContentAlignment="Center"
+                                  Content="Search in section names"
+                                  Foreground="{StaticResource Control_Foreground_DarkMode}"/>
+
+                        <CheckBox x:Name="CheckBox_ReplaceInGroups"
+                                  Grid.Column="0" Grid.ColumnSpan="2"
+                                  Grid.Row="6" Grid.RowSpan="1"
+                                  VerticalContentAlignment="Center"
+                                  Content="Search in group names"
+                                  Foreground="{StaticResource Control_Foreground_DarkMode}"/>
+
+                        <CheckBox x:Name="CheckBox_ReplaceInKeys"
+                                  Grid.Column="0" Grid.ColumnSpan="2"
+                                  Grid.Row="7" Grid.RowSpan="1"
+                                  VerticalContentAlignment="Center"
+                                  Content="Search in key names"
+                                  Foreground="{StaticResource Control_Foreground_DarkMode}"/>
+
+                        <CheckBox x:Name="CheckBox_ReplaceInValues"
+                                  Grid.Column="0" Grid.ColumnSpan="2"
+                                  Grid.Row="8" Grid.RowSpan="1"
+                                  VerticalContentAlignment="Center"
+                                  Content="Search in key values"
+                                  Foreground="{StaticResource Control_Foreground_DarkMode}"/>
+
+                        <CheckBox x:Name="CheckBox_ReplaceInComments"
+                                  Grid.Column="0" Grid.ColumnSpan="2"
+                                  Grid.Row="9" Grid.RowSpan="1"
+                                  VerticalContentAlignment="Center"
+                                  Content="Search in comments"
+                                  Foreground="{StaticResource Control_Foreground_DarkMode}"/>
+
+                    </Grid>
+
+                    <Grid Grid.Row="1" Grid.RowSpan="1"
+                          Margin="2">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="120"/>
+                            <ColumnDefinition Width="120"/>
+                        </Grid.ColumnDefinitions>
+
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+
+                        <Button x:Name="TextBox_Replace_SearchNext"
+                                Grid.Column="1" Grid.ColumnSpan="1"
+                                Grid.Row="0" Grid.RowSpan="1"
+                                Margin="4" Content="Search Next"
+                                Click="TextBox_Replace_SearchNext_Click"/>
+
+                        <Button x:Name="TextBox_Replace_SearchAll"
+                                Grid.Column="2" Grid.ColumnSpan="1"
+                                Grid.Row="0" Grid.RowSpan="1"
+                                Margin="4" Content="Search All"
+                                Click="TextBox_Replace_SearchAll_Click"/>
+
+                        <Button x:Name="TextBox_Replace_ReplaceCurrent"
+                                Grid.Column="1" Grid.ColumnSpan="1"
+                                Grid.Row="1" Grid.RowSpan="1"
+                                Margin="4" Content="Replace"
+                                Click="TextBox_Replace_ReplaceCurrent_Click"/>
+
+                        <Button x:Name="TextBox_Replace_ReplaceAll"
+                                Grid.Column="2" Grid.ColumnSpan="1"
+                                Grid.Row="1" Grid.RowSpan="1"
+                                Margin="4" Content="Replace All"
+                                Click="TextBox_Replace_ReplaceAll_Click"/>
+                    </Grid>
+
+                </Grid>
+
             </TabItem>
         </TabControl>
     </Grid>

@@ -29,19 +29,19 @@ namespace WINI_Tool
     /// </summary>
     public partial class MainWindow : Window
     {
-        public TextSearchControl TextSearchControl { get; private set; }
+        public static TextSearchControl TextSearchControl => new TextSearchControl();
 
         private INIReader _iniTemplate;
         private INIReader _iniTarget;
-        
+
         public MainWindow()
         {
-            TextSearchControl = new TextSearchControl();
-
             InitializeComponent();
 
-            _iniTemplate = INIReader.Create(@"C:\Users\Admin\Documents\WINI Tool - Template.ini", INIContentControl_Template);
-            _iniTarget = INIReader.Create(@"C:\Users\Admin\Documents\WINI Tool - Target.ini", INIContentControl_Target);
+            _iniTemplate = INIReader.Create(@"C:\Users\Admin\Documents\WINI Tool - Template.ini");
+            _iniTemplate.SetContentControl(INIContentControl_Template);
+            _iniTarget = INIReader.Create(@"C:\Users\Admin\Documents\WINI Tool - Target.ini");
+            _iniTarget.SetContentControl(INIContentControl_Target);
         }
 
         protected override void OnClosing(CancelEventArgs e)

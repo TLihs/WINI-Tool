@@ -7,7 +7,6 @@ using System.Diagnostics;
 using System.IO;
 
 using static WPFExceptionHandler.ExceptionManagement;
-using static WINI_Tool.Data.Editor.EditorVisualization;
 
 namespace WINI_Tool.Support
 {
@@ -73,7 +72,7 @@ namespace WINI_Tool.Support
 
         public static void Log(EXCEPTIONTYPES type, string message)
         {
-            EHLogGenericError(string.Format("{0} ({1})", ExceptionToString(type), message));
+            EHLogGenericError("{0} ({1})", ExceptionToString(type), message);
         }
 
         public static void Log(LogEntryType type, string message)
@@ -98,9 +97,9 @@ namespace WINI_Tool.Support
             }
         }
 
-        public static void LogDebug(string message) => EHLogDebug(message);
-        public static void LogWarning(string message) => EHLogWarning(message);
-        public static void LogGenericError(string message) => EHLogGenericError(message);
+        public static void LogDebug(string message, params string[] formatParameters) => EHLogDebug(message, formatParameters);
+        public static void LogWarning(string message, params string[] formatParameters) => EHLogWarning(message, formatParameters);
+        public static void LogGenericError(string message, params string[] formatParameters) => EHLogGenericError(message, formatParameters);
         public static void LogGenericError(Exception exception) => EHLogGenericError(exception);
         public static void LogCriticalError(Exception exception) => EHLogCriticalError(exception);
     }

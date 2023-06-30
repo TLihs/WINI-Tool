@@ -4,9 +4,12 @@
 
 using System.Collections.Generic;
 using System.IO;
+using System.Runtime.Remoting.Messaging;
 using System.Text;
-
+using System.Windows.Controls;
 using WINI_Tool.Controls;
+
+using static WINI_Tool.Support.ExceptionHandling;
 
 namespace WINI_Tool.Data.Base
 {
@@ -20,19 +23,16 @@ namespace WINI_Tool.Data.Base
         public string FilePath => _filePath;
         public INIContentControl ContentControl => _contentControl;
 
-        private INIReader(string filePath, INIContentControl contentControl)
+        private INIReader(string filePath)
         {
             _filePath = filePath;
-            _contentControl = contentControl;
         }
 
-        public static INIReader Create(string filePath, INIContentControl control = null)
+        public static INIReader Create(string filePath)
         {
-            INIReader reader = new INIReader(filePath, control);
+            INIReader reader = new INIReader(filePath);
 
             if (!reader.LoadFile(filePath))
-                return null;
-            if (!reader.LoadControl(control))
                 return null;
 
             return reader;
@@ -45,6 +45,8 @@ namespace WINI_Tool.Data.Base
 
         private bool LoadFile(string filePath)
         {
+            LogDebug(string.Format("INIReader::LoadFile({0})", filePath));
+
             if (!File.Exists(filePath))
             {
 
@@ -101,11 +103,36 @@ namespace WINI_Tool.Data.Base
 
         private bool ReloadFile()
         {
+            LogDebug("INIReader::ReloadFile()");
+
             return false;
+        }
+
+        public void SetContentControl(Control control)
+        {
+            LogDebug("INIReader::SetContentControl(..)");
+
+            if (control == null)
+            {
+                if (_contentControl != null)
+                    _contentControl.UnloadReader();
+
+                return;
+            }
+            
+            if (control.GetType() == typeof(INIContentControl))
+            {
+                if (!LoadControl((INIContentControl)control))
+                    LogWarning("INIReader::SetContentControl(..) - Control could not be set.");
+            }
+            else
+                LogWarning("INIReader::SetContentControl(..) - Control is not of any supported type.");
         }
 
         private bool LoadControl(INIContentControl control)
         {
+            LogDebug("INIReader::LoadControl(..)");
+
             if (control == null)
                 return false;
 
@@ -114,6 +141,8 @@ namespace WINI_Tool.Data.Base
 
         private void OnFileChanged(object sender, FileSystemEventArgs e)
         {
+            LogDebug("INIReader::OnFileChanged(..)");
+
             switch (e.ChangeType)
             {
                 case WatcherChangeTypes.Deleted:

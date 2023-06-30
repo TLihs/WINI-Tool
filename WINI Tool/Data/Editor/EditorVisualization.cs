@@ -59,7 +59,7 @@ namespace WINI_Tool.Data.Editor
 
         static EditorVisualization()
         {
-            RXColorization.CreateAndRegister(RXKeyValuePair);
+            RXColorization.CreateAndRegister(RXKeyValuePair, MARKING.INFO_NO_MARKING);
         }
 
         public static string MarkingToString(MARKING mark)
@@ -119,7 +119,8 @@ namespace WINI_Tool.Data.Editor
         public class RXColorization
         {
             private static List<RXColorization> _reservedFormats = new List<RXColorization>();
-            
+
+            public MARKING Marking { get; set; }
             public Regex Format { get; }
             public Color Background { get; set; }
             public Color Foreground { get; set; }
@@ -140,7 +141,7 @@ namespace WINI_Tool.Data.Editor
                 SelectedBorder = Colors.Black;
             }
 
-        public static RXColorization CreateAndRegister(Regex format)
+        public static RXColorization CreateAndRegister(Regex format, MARKING marking)
             {
                 if (format == null)
                 {
