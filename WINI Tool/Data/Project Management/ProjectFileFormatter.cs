@@ -11,8 +11,10 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Xml;
 using System.Xml.Linq;
+using WINI_Tool.Data.Base;
 
 using static WINI_Tool.Support.ExceptionHandling;
+using static WINI_Tool.Support.XMLHandling;
 
 namespace WINI_Tool.Data.Project_Management
 {
@@ -20,7 +22,7 @@ namespace WINI_Tool.Data.Project_Management
     {
         private static readonly string _DEFAULTSAVEFILEPATH = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "WINI Tool Projects");
 
-        private string _filePath;
+        public string FilePath { get; private set; }
         private Project _project;
         
         private ProjectFileFormatter(Project project)
@@ -53,7 +55,7 @@ namespace WINI_Tool.Data.Project_Management
                 IndentChars = "\t",
                 WriteEndDocumentOnClose = true
             };
-            XmlWriter writer = XmlWriter.Create(_filePath, settings);
+            XmlWriter writer = XmlWriter.Create(FilePath, settings);
             writer.WriteStartDocument();
             writer.WriteStartElement("WINIToolProject");
             writer.Close();
@@ -63,18 +65,21 @@ namespace WINI_Tool.Data.Project_Management
         {
             LogDebug("ProjectFileFormatter::Save()");
 
-            if (string.IsNullOrEmpty(_filePath))
+            if (string.IsNullOrEmpty(FilePath))
             {
                 SaveAs();
                 return;
             }
 
-            XDocument document = XDocument.Load(_filePath);
+            XDocument document = XDocument.Load(FilePath);
             XElement root = document.Root;
             root.RemoveAll();
             root.Add(new XElement("ProjectName", _project.ProjectName));
-            root.Add(new XElement("TemplatePath"));
-            root.Add(new XElement("TargetPath"));
+            root.Add(new XElement("TemplatePath", _project.TemplateTargetPair.TemplateReader.FilePath));
+            XElement targetpaths = new XElement("Targets");
+            foreach (INIReader reader in _project.TemplateTargetPair.TargerReaders)
+                targetpaths.Add(new XElement("TargetPath", reader.FilePath));
+            root.Add(targetpaths);
         }
 
         public void SaveAs()
@@ -99,10 +104,29 @@ namespace WINI_Tool.Data.Project_Management
             if (dialog.ShowDialog() != true)
                 return;
             
-            _filePath = dialog.FileName;
+            FilePath = dialog.FileName;
             CreateSaveFileTemplate();
 
             Save();
+        }
+
+        public static Project Load(string filePath)
+        {
+            LogDebug("ProjectFileFormatter::Load({0})", filePath);
+
+            if (!File.Exists(filePath))
+            {
+                LogGenericError(new FileNotFoundException("File not found: '" + filePath + "'"));
+                return null;
+            }
+            
+            XDocument document = XDocument.Load(filePath);
+            XElement root = document.Root;
+            string name = TryReadValue(root, "ProjectName", "");
+            string templatepath = TryReadValue(root, "TemplatePath", "");
+            List<string> targetpaths = TryReadListValue(root, "Targets", "TargetPath", "");
+
+            return Project.Create(filePath, name, templatepath, targetpaths.ToArray());
         }
     }
 }

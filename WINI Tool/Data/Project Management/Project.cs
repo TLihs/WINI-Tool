@@ -20,38 +20,35 @@ namespace WINI_Tool.Data.Project_Management
         public string ProjectName { get; set; }
         public ProjectSettings Settings { get; }
 
-        private Project(string projectPath, string projectName)
+        private Project(string projectPath, string projectName, string iniTemplatePath, string[] iniTargetPaths)
         {
 
         }
 
-        public static Project Create(string projectPath, string projectName, bool createNew)
+        public static Project Create(string projectPath, string projectName, string iniTemplatePath, string[] iniTargetPaths)
         {
-            LogDebug("Project::[static]Create({0}, {1}, {2})", projectPath, projectName, createNew ? "Create" : "Load");
+            LogDebug("Project::[static]Create({0}, {1}, {2})", projectPath, projectName);
 
             Project project = null;
             bool createFailed = false;
 
-            if (createNew)
+            if (!Uri.IsWellFormedUriString(projectPath, UriKind.RelativeOrAbsolute))
             {
-                if (!Uri.IsWellFormedUriString(projectPath, UriKind.RelativeOrAbsolute))
-                {
-                    LogGenericError("Invalid path format: '{0}'", projectPath);
-                    createFailed = true;
-                }
-                else
-                {
-                    File.Create(projectPath);
-                }
+                LogGenericError("Invalid path format: '{0}'", projectPath);
+                createFailed = true;
+            }
+            else if (!File.Exists(projectPath))
+            {
+                File.Create(projectPath);
             }
 
             if (!createFailed)
-                project = new Project(projectPath, projectName);
+                project = new Project(projectPath, projectName, iniTemplatePath, iniTargetPaths);
 
             return project;
         }
 
-        public static Project Load(string projectFilePath, string projectName)
+        public static Project Load(string projectFilePath)
         {
             LogDebug("Project::[static]Load({0})", projectFilePath);
 
@@ -65,10 +62,8 @@ namespace WINI_Tool.Data.Project_Management
             }
 
             if (!loadFailed)
-            {
-                project = Create(projectFilePath, projectName, false);
-            }
-            
+                project = ProjectFileFormatter.Load(projectFilePath);
+
             return project;
         }
     }

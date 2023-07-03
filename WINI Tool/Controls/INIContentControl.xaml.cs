@@ -189,11 +189,11 @@ namespace WINI_Tool.Controls
                     {
                         if (activemodifierkeys.HasFlag(ModifierKeys.Shift))
                         {
-                            if (!MainWindow.TextSearchControl.IsVisible)
-                                MainWindow.TextSearchControl.Show();
+                            if (!MainWindow.TextSearchWindow.IsVisible)
+                                MainWindow.TextSearchWindow.Show();
 
                             if (!RichTextBox_INIContent.Selection.IsEmpty)
-                                Log(EXCEPTIONTYPES.ERR_FUNCTION_NOTIMPLEMENTED, "INIContentControl::RichTextBox_INIContent_PreviewKeyDown - set text to TextSearchControl");
+                                Log(EXCEPTIONTYPES.ERR_FUNCTION_NOTIMPLEMENTED, "INIContentControl::RichTextBox_INIContent_PreviewKeyDown - set text to TextSearchWindow");
                         }
                         else
                         {

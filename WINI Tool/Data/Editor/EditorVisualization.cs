@@ -57,6 +57,8 @@ namespace WINI_Tool.Data.Editor
             ERR_KEY_INVALIDCHAR = 0x_8000_0012,
         }
 
+        public static Dictionary<Regex, RXColorization> RegisteredFormats = new Dictionary<Regex, RXColorization>();
+
         static EditorVisualization()
         {
             RXColorization.CreateAndRegister(RXKeyValuePair, MARKING.INFO_NO_MARKING);
@@ -118,8 +120,6 @@ namespace WINI_Tool.Data.Editor
 
         public class RXColorization
         {
-            private static List<RXColorization> _reservedFormats = new List<RXColorization>();
-
             public MARKING Marking { get; set; }
             public Regex Format { get; }
             public Color Background { get; set; }
@@ -129,9 +129,10 @@ namespace WINI_Tool.Data.Editor
             public Color SelectedForeground { get; set; }
             public Color SelectedBorder { get; set; }
 
-            private RXColorization(Regex format)
+            private RXColorization(Regex format, MARKING marking)
             {
                 Format = format;
+                Marking = marking;
 
                 Background = Colors.Transparent;
                 Foreground = Colors.Gray;
@@ -141,7 +142,7 @@ namespace WINI_Tool.Data.Editor
                 SelectedBorder = Colors.Black;
             }
 
-        public static RXColorization CreateAndRegister(Regex format, MARKING marking)
+            public static RXColorization CreateAndRegister(Regex format, MARKING marking)
             {
                 if (format == null)
                 {
@@ -149,15 +150,14 @@ namespace WINI_Tool.Data.Editor
                     return null;
                 }
 
-                RXColorization newcolorization = _reservedFormats.Find(colorization => colorization.Format.Equals(format));
-                if (newcolorization != null)
+                if (RegisteredFormats.ContainsKey(format))
                 {
                     LogWarning(string.Format("RXColorization::Create({0}) - Format already registered.", format.ToString()));
-                    return newcolorization;
+                    return RegisteredFormats[format];
                 }
 
-                newcolorization = new RXColorization(format);
-                _reservedFormats.Add(newcolorization);
+                RXColorization newcolorization = new RXColorization(format, marking);
+                RegisteredFormats.Add(format, newcolorization);
                 return newcolorization;
             }
         }

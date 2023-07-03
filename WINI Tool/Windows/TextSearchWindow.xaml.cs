@@ -19,12 +19,12 @@ using System.Windows.Shapes;
 using WINI_Tool.Data.Project_Management;
 using static WINI_Tool.Data.Project_Management.ProjectManager;
 
-namespace WINI_Tool.Controls
+namespace WINI_Tool.Windows
 {
     /// <summary>
-    /// Interaktionslogik für TextSearchControl.xaml
+    /// Interaktionslogik für TextSearchWindow.xaml
     /// </summary>
-    public partial class TextSearchControl : Window
+    public partial class TextSearchWindow : Window
     {
         private bool _hideOnClose;
         private string[] _searchLocations = new string[] { "Template INI", "Target INI(s)", "All INIs" };
@@ -44,7 +44,7 @@ namespace WINI_Tool.Controls
         public bool SearchInComments => _isReplaceMode ? (bool)CheckBox_ReplaceInComments.IsChecked : (bool)CheckBox_SearchInComments.IsChecked;
 
 
-        public TextSearchControl()
+        public TextSearchWindow()
         {
             _hideOnClose = true;
 

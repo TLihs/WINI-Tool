@@ -8,6 +8,15 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="720" Width="1280"
         Background="#1D1D1D">
+
+    <Window.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="./Controls/DarkModeDictionary.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </Window.Resources>
+
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="25"/>
@@ -27,7 +36,10 @@
             
         </Grid>
 
-        <StatusBar Grid.Row="3">
+        <StatusBar Grid.Row="3"
+                   Background="{StaticResource StatusBar_Background_DarkMode}"
+                   Foreground="{StaticResource StatusBar_Foreground_DarkMode}"
+                   BorderThickness="0">
             
         </StatusBar>
         
@@ -38,7 +50,9 @@
                 <ColumnDefinition Width="3*"/>
             </Grid.ColumnDefinitions>
 
-            <GridSplitter Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
+            <GridSplitter Grid.Column="1"
+                          HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
+                          Background="{StaticResource Window_Background_DarkMode}"/>
 
             <Grid Grid.Column="0">
                 <Grid.RowDefinitions>
@@ -47,7 +61,9 @@
                     <RowDefinition Height="*"/>
                 </Grid.RowDefinitions>
 
-                <GridSplitter Grid.Row="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
+                <GridSplitter Grid.Row="1"
+                              HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
+                              Background="{StaticResource Window_Background_DarkMode}"/>
 
                 <controls:INISettingsControl Grid.Row="2"/>
             </Grid>

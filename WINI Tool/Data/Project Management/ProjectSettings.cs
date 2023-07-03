@@ -18,7 +18,7 @@ namespace WINI_Tool.Data.Project_Management
 
         private ProjectSettings(Project project)
         {
-
+            Project = project;
         }
 
         public static ProjectSettings Create(Project project)

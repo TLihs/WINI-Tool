@@ -21,6 +21,7 @@ namespace WINI_Tool.Data.Project_Management
 
         public INIReader TemplateReader => _templateReader;
         public INIReader TargetReader(int index) => _targetReaders[index];
+        public INIReader[] TargerReaders => _targetReaders.ToArray();
         public bool StandaloneTemplate => _targetReaders.Count == 0;
 
         private INITemplateTargetPair(INIReader templateReader, List<INIReader> targetReaders = null)

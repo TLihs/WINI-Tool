@@ -18,7 +18,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-using WINI_Tool.Controls;
+using WINI_Tool.Windows;
 using WINI_Tool.Data.Base;
 using static WINI_Tool.Support.ExceptionHandling;
 
@@ -29,7 +29,7 @@ namespace WINI_Tool
     /// </summary>
     public partial class MainWindow : Window
     {
-        public static TextSearchControl TextSearchControl => new TextSearchControl();
+        public static TextSearchWindow TextSearchWindow => new TextSearchWindow();
 
         private INIReader _iniTemplate;
         private INIReader _iniTarget;
@@ -46,8 +46,8 @@ namespace WINI_Tool
 
         protected override void OnClosing(CancelEventArgs e)
         {
-            TextSearchControl.CloseFinally();
-            TextSearchControl.Close();
+            TextSearchWindow.CloseFinally();
+            TextSearchWindow.Close();
             base.OnClosing(e);
         }
 
@@ -64,20 +64,20 @@ namespace WINI_Tool
                             if (INIContentControl_Template.IsKeyboardFocusWithin)
                             {
                                 if (!INIContentControl_Template.RichTextBox_INIContent.Selection.IsEmpty)
-                                    TextSearchControl.TextBox_SearchInput.Text = INIContentControl_Template.RichTextBox_INIContent.Selection.Text;
+                                    TextSearchWindow.TextBox_SearchInput.Text = INIContentControl_Template.RichTextBox_INIContent.Selection.Text;
                             }
                             else if (INIContentControl_Target.IsKeyboardFocusWithin)
                             {
                                 if (!INIContentControl_Target.RichTextBox_INIContent.Selection.IsEmpty)
-                                    TextSearchControl.TextBox_SearchInput.Text = INIContentControl_Target.RichTextBox_INIContent.Selection.Text;
+                                    TextSearchWindow.TextBox_SearchInput.Text = INIContentControl_Target.RichTextBox_INIContent.Selection.Text;
                             }
                             else
-                                TextSearchControl.TextBox_SearchInput.Text = string.Empty;
+                                TextSearchWindow.TextBox_SearchInput.Text = string.Empty;
 
-                            if (!TextSearchControl.IsVisible)
-                                TextSearchControl.Show();
+                            if (!TextSearchWindow.IsVisible)
+                                TextSearchWindow.Show();
 
-                            TextSearchControl.Focus();
+                            TextSearchWindow.Focus();
                         }
                         else
                         {

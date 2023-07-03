@@ -6,8 +6,19 @@
              xmlns:local="clr-namespace:WINI_Tool.Controls"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="300">
-    <Border BorderBrush="Black" BorderThickness="0.5">
-        <Border Margin="10" Background="#1A1A1A"  BorderBrush="#303030" BorderThickness="0.5">
+
+    <Control.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="DarkModeDictionary.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </Control.Resources>
+
+    <Border BorderBrush="{StaticResource Control_Border_DarkMode}" BorderThickness="0.5">
+        <Border Margin="10"
+                Background="{StaticResource Control_Background_DarkMode}"
+                BorderBrush="{StaticResource Control_Border_DarkMode}" BorderThickness="0.5">
             <StackPanel Margin="15, 10">
                 <Grid>
                     <Grid.ColumnDefinitions>
@@ -15,17 +26,22 @@
                         <ColumnDefinition Width="1*"/>
                     </Grid.ColumnDefinitions>
                     
-                    <Label Grid.Column="0" Foreground="#EEEEEE" Content="Correct Spacing"/>
+                    <Label Grid.Column="0" Foreground="{StaticResource Control_Foreground_DarkMode}"
+                           Content="Correct Spacing"/>
                     
-                    <CheckBox x:Name="CheckBox_CorrectSpacing" Grid.Column="1" VerticalAlignment="Center"/>
+                    <CheckBox x:Name="CheckBox_CorrectSpacing"
+                              Grid.Column="1"
+                              VerticalAlignment="Center"/>
                 </Grid>
+                
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="3*"/>
                         <ColumnDefinition Width="1*"/>
                     </Grid.ColumnDefinitions>
-                    
-                    <Label Grid.Column="0" Foreground="#EEEEEE" Content="Synchronize Changes"/>
+
+                    <Label Grid.Column="0" Foreground="{StaticResource Control_Foreground_DarkMode}"
+                           Content="Synchronize Changes"/>
 
                     <CheckBox x:Name="CheckBox_SyncChanges" Grid.Column="1" VerticalAlignment="Center"/>
                 </Grid>
