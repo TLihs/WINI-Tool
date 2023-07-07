@@ -5,7 +5,7 @@
 using System;
 using System.Diagnostics;
 using System.IO;
-
+using System.Windows;
 using static WPFExceptionHandler.ExceptionManagement;
 
 namespace WINI_Tool.Support
@@ -102,5 +102,8 @@ namespace WINI_Tool.Support
         public static void LogGenericError(string message, params string[] formatParameters) => EHLogGenericError(message, formatParameters);
         public static void LogGenericError(Exception exception) => EHLogGenericError(exception);
         public static void LogCriticalError(Exception exception) => EHLogCriticalError(exception);
+
+        public static void MsgBox(LogEntryType type, string message, Window owner = null, params string[] formatParameters) => EHMsgBox(type, message, owner, formatParameters);
+        public static MessageBoxResult MsgBoxYesNo(string message, Window owner = null, params string[] formatParameters) => EHMsgBoxYesNo(message, owner, formatParameters);
     }
 }

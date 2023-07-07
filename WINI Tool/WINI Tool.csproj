@@ -78,8 +78,14 @@
     <Compile Include="Controls\INISettingsControl.xaml.cs">
       <DependentUpon>INISettingsControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Controls\MultiPathSelectionTextBoxControl.xaml.cs">
+      <DependentUpon>MultiPathSelectionTextBoxControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Controls\PathSelectionTextBoxControl.xaml.cs">
       <DependentUpon>PathSelectionTextBoxControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\RemovablePathSelectionTextBoxControl.xaml.cs">
+      <DependentUpon>RemovablePathSelectionTextBoxControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="Support\XMLHandling.cs" />
     <Compile Include="Windows\TextSearchWindow.xaml.cs">
@@ -116,7 +122,15 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Controls\MultiPathSelectionTextBoxControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Controls\PathSelectionTextBoxControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\RemovablePathSelectionTextBoxControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

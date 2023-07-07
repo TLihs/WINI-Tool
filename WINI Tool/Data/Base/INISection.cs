@@ -9,6 +9,7 @@ using System.Linq;
 using System.Text.RegularExpressions;
 
 using static WINI_Tool.Support.Constants;
+using static WINI_Tool.Support.ExceptionHandling;
 
 namespace WINI_Tool.Data.Base
 {
@@ -43,17 +44,17 @@ namespace WINI_Tool.Data.Base
 
             if (!match.Success)
             {
-                Debug.Print(string.Format("INISection::Create({0}) - section doesn't match section format", lineContent.Text));
+                LogWarning("INISection::Create({0}) - Section doesn't match section format", lineContent.Text);
                 return null;
             }
             
-            if (match.Groups[0].Length > 0)
+            if (match.Groups[1].Length > 0)
             {
-                Debug.Print(string.Format("INISection::Create({0}) - section is commented out", lineContent.Text));
+                LogWarning("INISection::Create({0}) - Section is commented out", lineContent.Text);
                 return null;
             }
 
-            string name = match.Groups[1].Value;
+            string name = match.Groups[2].Value;
             if (string.IsNullOrWhiteSpace(comment))
                 comment = match.Groups[5].Value;
 
@@ -138,7 +139,7 @@ namespace WINI_Tool.Data.Base
 
             if (!iniKey.IsOfType(defaultValue.GetType()))
             {
-                Debug.Print(string.Format("INISection::GetValue({0}, {1}) - invalid type", key, defaultValue));
+                LogWarning("INISection::GetValue({0}, {1}) - invalid type", key, defaultValue.ToString());
                 return defaultValue;
             }
 
@@ -154,7 +155,7 @@ namespace WINI_Tool.Data.Base
 
             if (!iniKey.IsOfType(defaultValue.GetType()))
             {
-                Debug.Print(string.Format("INISection::GetValue({0}, {1}) - invalid type", key, defaultValue));
+                LogWarning("INISection::GetValue({0}, {1}) - invalid type", key, defaultValue.ToString());
                 return defaultValue;
             }
 
@@ -170,7 +171,7 @@ namespace WINI_Tool.Data.Base
 
             if (!iniKey.IsOfType(defaultValue.GetType()))
             {
-                Debug.Print(string.Format("INISection::GetValue({0}, {1}) - invalid type", key, defaultValue));
+                LogWarning("INISection::GetValue({0}, {1}) - invalid type", key, defaultValue.ToString());
                 return defaultValue;
             }
 
@@ -186,7 +187,7 @@ namespace WINI_Tool.Data.Base
 
             if (!iniKey.IsOfType(defaultValue.GetType()))
             {
-                Debug.Print(string.Format("INISection::GetValue({0}, {1}) - invalid type", key, defaultValue));
+                LogWarning("INISection::GetValue({0}, {1}) - invalid type", key, defaultValue.ToString());
                 return defaultValue;
             }
 

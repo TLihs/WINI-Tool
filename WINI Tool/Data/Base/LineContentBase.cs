@@ -143,7 +143,7 @@ namespace WINI_Tool.Data.Base
             NextContent = nextContent;
 
             _originalText = lineContent;
-            PositionStart = positionStart;
+            _positionStart = positionStart;
             Text = _originalText;
         }
 

@@ -17,9 +17,10 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-
 using WINI_Tool.Windows;
 using WINI_Tool.Data.Base;
+using WPFExceptionHandler;
+
 using static WINI_Tool.Support.ExceptionHandling;
 
 namespace WINI_Tool
@@ -29,6 +30,7 @@ namespace WINI_Tool
     /// </summary>
     public partial class MainWindow : Window
     {
+        private static ProjectCreationWindow _creationWindow;
         public static TextSearchWindow TextSearchWindow => new TextSearchWindow();
 
         private INIReader _iniTemplate;
@@ -36,6 +38,8 @@ namespace WINI_Tool
 
         public MainWindow()
         {
+            LogDebug("MainWindow::MainWindow()");
+
             InitializeComponent();
 
             _iniTemplate = INIReader.Create(@"C:\Users\Admin\Documents\WINI Tool - Template.ini");
@@ -46,13 +50,18 @@ namespace WINI_Tool
 
         protected override void OnClosing(CancelEventArgs e)
         {
+            LogDebug("MainWindow::OnClosing([CancelEventArgs])");
+
             TextSearchWindow.CloseFinally();
             TextSearchWindow.Close();
             base.OnClosing(e);
+            App.Current.Shutdown();
         }
 
         protected override void OnPreviewKeyDown(KeyEventArgs e)
         {
+            LogDebug("MainWindow::OnPreviewKeyDown({0})", Enum.GetName(typeof(Key), e.Key));
+
             switch (e.Key)
             {
                 case Key.F:
@@ -90,6 +99,30 @@ namespace WINI_Tool
             }
 
             base.OnPreviewKeyDown(e);
+        }
+
+        private void OnCreationWindowClosed(object sender, EventArgs e)
+        {
+            LogDebug("MainWindow::OnCreationWindowClosed([object], [EventArgs])");
+
+            _creationWindow = null;
+        }
+
+        private void Menu_File_NewProject_Click(object sender, RoutedEventArgs e)
+        {
+            LogDebug("MainWindow::OnPreviewKeyDown([sender], [RoutedEventArgs])");
+
+            if (_creationWindow == null)
+            {
+                _creationWindow = new ProjectCreationWindow();
+                _creationWindow.Closed += OnCreationWindowClosed;
+                _creationWindow.ShowDialog();
+            }
+            else
+            {
+                MsgBox(ExceptionManagement.LogEntryType.LE_ERROR_GENERIC, "Project creation window already opened.", this);
+                _creationWindow.Focus();
+            }
         }
     }
 }

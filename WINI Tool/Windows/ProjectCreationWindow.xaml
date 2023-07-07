@@ -9,6 +9,7 @@
         Title="ProjectCreationWindow" Height="450" Width="600"
         WindowStartupLocation="CenterOwner"
         ScrollViewer.VerticalScrollBarVisibility="Disabled"
+        ResizeMode="NoResize"
         Topmost="True" WindowStyle="ToolWindow">
 
     <Window.Resources>
@@ -22,11 +23,14 @@
     <Grid Background="{StaticResource Control_Background_DarkMode}">
         <Grid.RowDefinitions>
             <RowDefinition Height="*"/>
-            <RowDefinition Height="50"/>
+            <RowDefinition Height="42"/>
         </Grid.RowDefinitions>
 
         <Grid Grid.Row="0" Grid.RowSpan="1"
-              Margin="10">
+              Margin="8"
+              ScrollViewer.CanContentScroll="True"
+              ScrollViewer.VerticalScrollBarVisibility="Visible">
+
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="3*"/>
@@ -36,7 +40,8 @@
                 <RowDefinition Height="30"/>
                 <RowDefinition Height="30"/>
                 <RowDefinition Height="30"/>
-                <RowDefinition Height="*"/>
+                <RowDefinition Height="30"/>
+                <RowDefinition Height="235"/>
             </Grid.RowDefinitions>
 
             <Label Content="Project Name"
@@ -66,6 +71,12 @@
                    Style="{StaticResource Label_DarkMode}"
                    VerticalContentAlignment="Top"/>
 
+            <ScrollViewer Grid.Row="3" Grid.RowSpan="2" Grid.Column="1" Grid.ColumnSpan="1"
+                          HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto">
+                <controls:MultiPathSelectionTextBoxControl x:Name="MultiPathSelectionTextBox_TargetPaths"
+                                                           SelectionType="FileSelection"/>
+            </ScrollViewer>
+
         </Grid>
 
         <Grid Grid.Row="1" Grid.RowSpan="1"
@@ -79,13 +90,15 @@
             <Button x:Name="TextBox_Create"
                     Grid.Column="1" Grid.ColumnSpan="1"
                     Grid.Row="0" Grid.RowSpan="1"
-                    Margin="4" Content="Create"
+                    Style="{StaticResource Button_DarkMode}"
+                    Content="Create"
                     Click="TextBox_Create_Click"/>
 
             <Button x:Name="TextBox_Cancel"
                     Grid.Column="2" Grid.ColumnSpan="1"
                     Grid.Row="0" Grid.RowSpan="1"
-                    Margin="4" Content="Cancel"
+                    Style="{StaticResource Button_DarkMode}"
+                    Content="Cancel"
                     Click="TextBox_Cancel_Click"/>
         </Grid>
 

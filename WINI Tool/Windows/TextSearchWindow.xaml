@@ -37,30 +37,38 @@
                             <ControlTemplate TargetType="{x:Type TabItem}">
                                 <Grid>
                                     <Border x:Name="ContentBorder">
-                                        <ContentPresenter x:Name="ContentSite" VerticalAlignment="Center"
-                                                          HorizontalAlignment="Center"
-                                                          ContentSource="Header" Margin="12,2,12,2"
-                                                          RecognizesAccessKey="True"/>
+                                        <Border x:Name="FocusBorder" BorderBrush="{StaticResource Button_Pressed_Background_DarkMode}">
+                                            <ContentPresenter x:Name="ContentSite" VerticalAlignment="Center"
+                                                              HorizontalAlignment="Center"
+                                                              ContentSource="Header" Margin="12,2,12,2"
+                                                              RecognizesAccessKey="True"/>
+                                        </Border>
                                     </Border>
                                 </Grid>
                                 <ControlTemplate.Triggers>
                                     <Trigger Property="IsSelected" Value="True">
                                         <Setter TargetName="ContentBorder" Property="Background" Value="{StaticResource FocusedControl_Background_DarkMode}"/>
                                         <Setter TargetName="ContentBorder" Property="BorderBrush" Value="{StaticResource FocusedControl_Border_DarkMode}"/>
-                                        <Setter TargetName="ContentBorder" Property="BorderThickness" Value="1,1,1,0"/>
+                                        <Setter TargetName="ContentBorder" Property="BorderThickness" Value="1,0,1,0"/>
+                                        <Setter TargetName="FocusBorder" Property="BorderThickness" Value="0,2,0,0"/>
                                         <Setter Property="Background" Value="{StaticResource FocusedControl_Background_DarkMode}"/>
                                         <Setter Property="Foreground" Value="{StaticResource FocusedControl_Foreground_DarkMode}"/>
-                                        <Setter Property="FontSize" Value="12"/>
-                                        <Setter Property="FontWeight" Value="Regular"/>
+                                        <Setter Property="FontWeight" Value="SemiBold"/>
                                     </Trigger>
                                     <Trigger Property="IsSelected" Value="False">
                                         <Setter TargetName="ContentBorder" Property="Background" Value="{StaticResource InactiveControl_Background_DarkMode}"/>
                                         <Setter TargetName="ContentBorder" Property="BorderBrush" Value="{StaticResource InactiveControl_Border_DarkMode}"/>
                                         <Setter TargetName="ContentBorder" Property="BorderThickness" Value="1,1,1,1"/>
+                                        <Setter TargetName="FocusBorder" Property="BorderThickness" Value="0"/>
                                         <Setter Property="Background" Value="{StaticResource InactiveControl_Background_DarkMode}"/>
                                         <Setter Property="Foreground" Value="{StaticResource InactiveControl_Foreground_DarkMode}"/>
-                                        <Setter Property="FontSize" Value="12"/>
                                         <Setter Property="FontWeight" Value="Light"/>
+                                    </Trigger>
+                                    <Trigger Property="IsMouseOver" Value="True">
+                                        <Setter TargetName="ContentBorder" Property="Background" Value="{StaticResource FocusedControl_Background_DarkMode}"/>
+                                        <Setter TargetName="ContentBorder" Property="BorderBrush" Value="{StaticResource FocusedControl_Border_DarkMode}"/>
+                                        <Setter Property="Background" Value="{StaticResource FocusedControl_Background_DarkMode}"/>
+                                        <Setter Property="Foreground" Value="{StaticResource FocusedControl_Foreground_DarkMode}"/>
                                     </Trigger>
                                 </ControlTemplate.Triggers>
                             </ControlTemplate>
@@ -168,13 +176,15 @@
                         <Button x:Name="TextBox_Search_SearchNext"
                                 Grid.Column="1" Grid.ColumnSpan="1"
                                 Grid.Row="0" Grid.RowSpan="1"
-                                Margin="4" Content="Search Next"
+                                Style="{StaticResource Button_DarkMode}"
+                                Content="Search Next"
                                 Click="TextBox_Search_SearchNext_Click"/>
 
                         <Button x:Name="TextBox_Search_SearchAll"
                                 Grid.Column="2" Grid.ColumnSpan="1"
                                 Grid.Row="0" Grid.RowSpan="1"
-                                Margin="4" Content="Search All"
+                                Style="{StaticResource Button_DarkMode}"
+                                Content="Search All"
                                 Click="TextBox_Search_SearchAll_Click"/>
                     </Grid>
 
@@ -304,25 +314,29 @@
                         <Button x:Name="TextBox_Replace_SearchNext"
                                 Grid.Column="1" Grid.ColumnSpan="1"
                                 Grid.Row="0" Grid.RowSpan="1"
-                                Margin="4" Content="Search Next"
+                                Style="{StaticResource Button_DarkMode}"
+                                Content="Search Next"
                                 Click="TextBox_Replace_SearchNext_Click"/>
 
                         <Button x:Name="TextBox_Replace_SearchAll"
                                 Grid.Column="2" Grid.ColumnSpan="1"
                                 Grid.Row="0" Grid.RowSpan="1"
-                                Margin="4" Content="Search All"
+                                Style="{StaticResource Button_DarkMode}"
+                                Content="Search All"
                                 Click="TextBox_Replace_SearchAll_Click"/>
 
                         <Button x:Name="TextBox_Replace_ReplaceCurrent"
                                 Grid.Column="1" Grid.ColumnSpan="1"
                                 Grid.Row="1" Grid.RowSpan="1"
-                                Margin="4" Content="Replace"
+                                Style="{StaticResource Button_DarkMode}"
+                                Content="Replace"
                                 Click="TextBox_Replace_ReplaceCurrent_Click"/>
 
                         <Button x:Name="TextBox_Replace_ReplaceAll"
                                 Grid.Column="2" Grid.ColumnSpan="1"
                                 Grid.Row="1" Grid.RowSpan="1"
-                                Margin="4" Content="Replace All"
+                                Style="{StaticResource Button_DarkMode}"
+                                Content="Replace All"
                                 Click="TextBox_Replace_ReplaceAll_Click"/>
                     </Grid>
 

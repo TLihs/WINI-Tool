@@ -53,7 +53,7 @@ namespace WINI_Tool.Data.Base
                 return false;
             }
 
-            if (new FileInfo(filePath).Extension != "ini")
+            if (new FileInfo(filePath).Extension != ".ini")
             {
 
                 return false;

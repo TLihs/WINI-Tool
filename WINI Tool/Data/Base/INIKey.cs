@@ -7,6 +7,7 @@ using System.Diagnostics;
 using System.Text.RegularExpressions;
 
 using static WINI_Tool.Support.Constants;
+using static WINI_Tool.Support.ExceptionHandling;
 
 namespace WINI_Tool.Data.Base
 {
@@ -63,21 +64,21 @@ namespace WINI_Tool.Data.Base
 
         public static INIKey Create(LineContentBase lineContent)
         {
-            Match match = RXSectionName.Match(lineContent.Text);
+            Match match = RXKeyValuePair.Match(lineContent.Text);
 
             if (!match.Success)
             {
-                Debug.Print(string.Format("INIKey::Create({0}) - key doesn't match key format", lineContent.Text));
+                LogWarning("INIKey::Create({0}) - key doesn't match key format", lineContent.Text);
                 return null;
             }
 
-            string key = match.Groups[1].Value;
-            string value = match.Groups[2].Value;
-            bool iscomment = match.Groups[0].Length > 0;
+            string key = match.Groups[2].Value;
+            string value = match.Groups[3].Value;
+            bool iscomment = match.Groups[1].Length > 0;
             
             if (string.IsNullOrWhiteSpace(key))
             {
-                Debug.Print(string.Format("INIKey::Create({0}, {1}, {2}, {3}) - key is null or whitespace", lineContent, key, value, iscomment ? "as comment" : "not as comment"));
+                LogWarning("INIKey::Create({0}, {1}, {2}, {3}) - key is null or whitespace", lineContent.Text, key, value, iscomment ? "as comment" : "not as comment");
                 return null;
             }
 
@@ -140,7 +141,7 @@ namespace WINI_Tool.Data.Base
                 return bool.TryParse(Value, out outvalue);
             }
 
-            Debug.Print(string.Format("INIKeys::IsOfType({0}) - Not a valid type.", type.FullName));
+            LogWarning("INIKeys::IsOfType({0}) - Not a valid type.", type.FullName);
             return false;
         }
     }
